@@ -3,13 +3,17 @@ public class Board {
 	private Element[][] board;
 	
 	public Board() {
-		board = new Element[20][20];
-		initFloor();
-		initWalls();
-		initGoal();
+		initWorld(1);
 	}
 	
-	private void initWalls() {
+	public void initWorld(int i) {
+		board = new Element[20][20];
+		initFloor();
+		wallsLv1();
+		goalsLv1();
+		board[8][11] = new Character(); //add character
+	}
+	private void wallsLv1() {
 		//[y][x]
 		board[5][0] = new Wall();
 		board[6][0] = new Wall();
@@ -31,7 +35,6 @@ public class Board {
 		board[0][5] = new Wall();
 		board[0][6] = new Wall();
 		board[0][7] = new Wall();
-		//board[0][8] = new Wall();
 		
 		board[0][8] = new Wall();
 		board[1][8] = new Wall();
@@ -98,7 +101,7 @@ public class Board {
 		board[6][7] = new Wall();
 	}
 
-	public void initGoal(){
+	public void goalsLv1(){
 		board[6][17] = new Goal();
 		board[7][17] = new Goal();
 		board[8][17] = new Goal();
