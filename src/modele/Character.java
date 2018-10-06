@@ -2,8 +2,8 @@ package modele;
 
 public class Character extends MobilElement {
 	
-	public Character() {
-		super(5);
+	public Character(int cell) {
+		super(5, cell);
 	}
 
 	public Character(boolean onGoal) {

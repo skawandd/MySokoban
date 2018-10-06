@@ -13,7 +13,7 @@ public class Board {
 		initFloor();
 		wallsLv1();
 		goalsLv1();
-		board[8][11] = new Character(); //add character
+		board[8][11] = new Character(0); //add character
 		characterX = 11; //x=11 y=8
 		characterY = 8;
 	}
@@ -136,14 +136,17 @@ public class Board {
 	}
 	
 	public void moveCharacter(int i) {
-
+		int cell = 0;
+		
 		switch (i) {
 
 		case 1:
 			System.out.println("Up");
 			//[y][x]
 			try {
-				board[--characterY][characterX] = new Character();
+				cell = board[characterY-1][characterX].getElementId();
+				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
+				board[--characterY][characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
@@ -152,7 +155,9 @@ public class Board {
 		case 2:
 			System.out.println("Down");
 			try {
-				board[++characterY][characterX] = new Character();
+				cell = board[characterY+1][characterX].getElementId();
+				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
+				board[++characterY][characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
@@ -161,7 +166,9 @@ public class Board {
 		case 3:
 			System.out.println("Left");
 			try {
-				board[characterY][--characterX] = new Character();
+				cell = board[characterY][characterX-1].getElementId();
+				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
+				board[characterY][--characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
@@ -170,7 +177,9 @@ public class Board {
 		case 4:
 			System.out.println("Right");
 			try {
-				board[characterY][++characterX] = new Character();
+				cell = board[characterY][characterX+1].getElementId();
+				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
+				board[characterY][++characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
