@@ -1,6 +1,7 @@
 
 public class Board {
 	private Element[][] board;
+	private int characterX, characterY;
 	
 	public Board() {
 		initWorld(1);
@@ -12,6 +13,8 @@ public class Board {
 		wallsLv1();
 		goalsLv1();
 		board[8][11] = new Character(); //add character
+		characterX = 11; //x=11 y=8
+		characterY = 8;
 	}
 	private void wallsLv1() {
 		//[y][x]
@@ -117,18 +120,7 @@ public class Board {
 			}
 		}
 	}
-	
-	public void initWallTest() {
-		for(int x = 1; x < board[0].length - 1; ++x) {
-			for(int y = 1; y < board[0].length - 1; ++y) {
-				board[1][y] = new Element(1); //top
-				board[board[0].length-2][y] = new Wall(); //bot
-				
-				board[x][1] = new Element(1); //top
-				board[x][board[0].length-2] = new Wall(); //bot
-			}
-		}
-	}
+
 	//board[y][x]
 	public void initGoalTest() {
 		board[2][8] = new Goal();
@@ -140,6 +132,52 @@ public class Board {
 		board[3][9] = new Goal();
 		board[3][10] = new Goal();
 		board[3][11] = new Goal();
+	}
+	
+	public void moveCharacter(int i) {
+
+		switch (i) {
+
+		case 1:
+			System.out.println("Up");
+			//[y][x]
+			try {
+				board[--characterY][characterX] = new Character();
+			} catch (Exception e) {
+				//TODO
+			}
+			break;
+
+		case 2:
+			System.out.println("Down");
+			try {
+				board[++characterY][characterX] = new Character();
+			} catch (Exception e) {
+				//TODO
+			}
+			break;
+
+		case 3:
+			System.out.println("Left");
+			try {
+				board[characterY][--characterX] = new Character();
+			} catch (Exception e) {
+				//TODO
+			}
+			break;
+
+		case 4:
+			System.out.println("Right");
+			try {
+				board[characterY][++characterX] = new Character();
+			} catch (Exception e) {
+				//TODO
+			}
+			break;
+
+		default:
+			break;
+		}
 	}
 	
 	public void showBoard() {

@@ -1,3 +1,4 @@
+import view.Menu;
 
 public class Game {
 	private String playerName;
@@ -20,6 +21,12 @@ public class Game {
 		this.board = board;
 	}
 	
+	public void Play() {
+		while(true) {
+			this.getBoard().showBoard();
+			this.getBoard().moveCharacter(new Menu().showMenu());
+		}
+	}
 	
 	
 }
