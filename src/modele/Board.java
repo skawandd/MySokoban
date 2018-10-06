@@ -1,3 +1,4 @@
+package modele;
 
 public class Board {
 	private Element[][] board;
@@ -181,13 +182,16 @@ public class Board {
 	}
 	
 	public void showBoard() {
+		System.out.println("=======================================");
 		for (int i1 = 0; i1 < board.length; ++i1) {
 			String out = "";
 			for (int i2 = 0; i2 < board[i1].length; ++i2) {
 				out += board[i1][i2].getElementId() + " ";
 			}
 			System.out.println(out);
+			
 		}
+		System.out.println("=======================================");
 	}
 	
 	

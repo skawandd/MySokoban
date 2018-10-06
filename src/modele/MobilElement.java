@@ -1,3 +1,4 @@
+package modele;
 
 public class MobilElement extends Element {
 	private int currentCell;

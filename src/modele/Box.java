@@ -1,3 +1,4 @@
+package modele;
 
 public class Box extends MobilElement {
 	private boolean locked;

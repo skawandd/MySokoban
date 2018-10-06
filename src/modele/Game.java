@@ -1,12 +1,17 @@
+package modele;
 import view.Menu;
 
 public class Game {
 	private String playerName;
 	private Board board;
+	private int moves;
+	private int lvl;
 	
 	public Game(String playerName) {
 		this.playerName = playerName;
 		this.board = new Board();
+		this.moves = 0;
+		this.lvl = 1;
 	}
 	public String getPlayerName() {
 		return playerName;
@@ -20,11 +25,19 @@ public class Game {
 	public void setBoard(Board board) {
 		this.board = board;
 	}
-	
+	public int getMoves() {
+		return this.moves;
+	}
+	public int getLvl() {
+		return this.lvl;
+	}
 	public void Play() {
+		moves = 0;
 		while(true) {
+			++moves;
+			new Menu(this).showInfo();
 			this.getBoard().showBoard();
-			this.getBoard().moveCharacter(new Menu().showMenu());
+			this.getBoard().moveCharacter(new Menu(this).showMenu());
 		}
 	}
 	

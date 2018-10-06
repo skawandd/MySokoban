@@ -1,17 +1,24 @@
 package view;
 
+import modele.Game; 
 import java.util.Scanner;
 
 public class Menu {
-
-	public Menu() {
-		// TODO Auto-generated constructor stub
+	private Game game;
+	
+	public Menu(Game game) {
+		this.game = game;
 	}
 	
 	public int showMenu() {
-		System.out.println("1.Up    2.Down\n3.Left  4.Right\n");
+		System.out.println("1.Up    2.Down\n3.Left  4.Right\n===============\n");
 		Scanner sc = new Scanner(System.in);
 		return sc.nextInt();
+	}
+	
+	public void showInfo() {
+		System.out.println("=======================================");
+		System.out.println("Lvl"+ game.getLvl()+" | moves:"+game.getMoves()+" | Player: "+game.getPlayerName());
 	}
 
 }
