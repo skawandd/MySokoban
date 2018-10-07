@@ -3,17 +3,14 @@ package modele;
 public class Character extends MobilElement {
 	
 	public Character(int cell) {
-		super(5, cell);
-	}
-
-	public Character(boolean onGoal) {
-		super(6);
+		super(5);
+		this.setCurrentCell(cell);
 	}
 	
-
-	public Character checkCell() {
-		if (getCurrentCell() == 4)
-			return new CharacterOnGoal();
-		return this;
+	public Character(int i, int cell) {
+		super(i);
+		this.setCurrentCell(cell);
 	}
+	
+	
 }

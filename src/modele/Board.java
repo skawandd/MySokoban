@@ -146,7 +146,10 @@ public class Board {
 			try {
 				cell = board[characterY-1][characterX].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
-				board[--characterY][characterX] = new Character(cell);
+				if(board[characterY-1][characterX].isGoal()) {
+					board[--characterY][characterX] = new CharacterOnGoal(cell);
+				}else
+					board[--characterY][characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
@@ -157,7 +160,10 @@ public class Board {
 			try {
 				cell = board[characterY+1][characterX].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
-				board[++characterY][characterX] = new Character(cell);
+				if(board[characterY+1][characterX].isGoal()) {
+					board[++characterY][characterX] = new CharacterOnGoal(cell);
+				}else
+					board[++characterY][characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
@@ -168,7 +174,10 @@ public class Board {
 			try {
 				cell = board[characterY][characterX-1].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
-				board[characterY][--characterX] = new Character(cell);
+				if(board[characterY][characterX-1].isGoal()) {
+					board[characterY][--characterX] = new CharacterOnGoal(cell);
+				}else
+					board[characterY][--characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}
@@ -179,7 +188,11 @@ public class Board {
 			try {
 				cell = board[characterY][characterX+1].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
-				board[characterY][++characterX] = new Character(cell);
+				if(board[characterY][characterX+1].isGoal()) {
+					board[characterY][++characterX] = new CharacterOnGoal(cell);
+					System.out.println("OKKK");
+				}else
+					board[characterY][++characterX] = new Character(cell);
 			} catch (Exception e) {
 				//TODO
 			}

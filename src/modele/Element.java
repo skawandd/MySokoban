@@ -24,4 +24,13 @@ public class Element {
 	public int getCurrentCell() {
 		return this.currentCell;
 	}
+	public void setCurrentCell(int currentCell) {
+		this.currentCell = currentCell;
+	}
+	public boolean isGoal() {
+		if(this.id == 4) {
+			return true;
+		}
+		return false;
+	}
 }
