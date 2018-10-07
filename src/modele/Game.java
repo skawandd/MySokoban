@@ -34,8 +34,8 @@ public class Game {
 	public void Play() {
 		moves = 0;
 		while(true) {
-			++moves;
 			new Menu(this).showInfo();
+			++moves;
 			this.getBoard().showBoard();
 			this.getBoard().moveCharacter(new Menu(this).showMenu());
 		}

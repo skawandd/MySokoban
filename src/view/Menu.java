@@ -18,7 +18,7 @@ public class Menu {
 	
 	public void showInfo() {
 		System.out.println("=======================================");
-		System.out.println("Lvl"+ game.getLvl()+" | moves:"+game.getMoves()+" | Time: XX:XX"+" | "+game.getPlayerName()); //TODO timer
+		System.out.println("Lvl"+ game.getLvl()+" | Moves:"+game.getMoves()+" | Time: XX:XX"+" | "+game.getPlayerName()); //TODO timer
 	}
 
 }

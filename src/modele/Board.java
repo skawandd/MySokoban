@@ -147,7 +147,7 @@ public class Board {
 				cell = board[characterY-1][characterX].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 				if(board[characterY-1][characterX].isGoal()) {
-					board[--characterY][characterX] = new CharacterOnGoal(cell);
+					board[--characterY][characterX] = new CharacterOnGoal();
 				}else
 					board[--characterY][characterX] = new Character(cell);
 			} catch (Exception e) {
@@ -161,7 +161,7 @@ public class Board {
 				cell = board[characterY+1][characterX].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 				if(board[characterY+1][characterX].isGoal()) {
-					board[++characterY][characterX] = new CharacterOnGoal(cell);
+					board[++characterY][characterX] = new CharacterOnGoal();
 				}else
 					board[++characterY][characterX] = new Character(cell);
 			} catch (Exception e) {
@@ -175,7 +175,7 @@ public class Board {
 				cell = board[characterY][characterX-1].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 				if(board[characterY][characterX-1].isGoal()) {
-					board[characterY][--characterX] = new CharacterOnGoal(cell);
+					board[characterY][--characterX] = new CharacterOnGoal();
 				}else
 					board[characterY][--characterX] = new Character(cell);
 			} catch (Exception e) {
@@ -189,7 +189,7 @@ public class Board {
 				cell = board[characterY][characterX+1].getElementId();
 				board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 				if(board[characterY][characterX+1].isGoal()) {
-					board[characterY][++characterX] = new CharacterOnGoal(cell);
+					board[characterY][++characterX] = new CharacterOnGoal();
 					System.out.println("OKKK");
 				}else
 					board[characterY][++characterX] = new Character(cell);

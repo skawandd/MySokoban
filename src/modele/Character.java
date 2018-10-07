@@ -7,9 +7,8 @@ public class Character extends MobilElement {
 		this.setCurrentCell(cell);
 	}
 	
-	public Character(int i, int cell) {
-		super(i);
-		this.setCurrentCell(cell);
+	public Character() {
+		super(6);
 	}
 	
 	
