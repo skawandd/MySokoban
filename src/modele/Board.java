@@ -13,6 +13,7 @@ public class Board {
 		initFloor();
 		wallsLv1();
 		goalsLv1();
+		boxLvl1();
 		board[8][11] = new Character(0); //add character
 		characterX = 11; //x=11 y=8
 		characterY = 8;
@@ -133,6 +134,18 @@ public class Board {
 		board[3][9] = new Goal();
 		board[3][10] = new Goal();
 		board[3][11] = new Goal();
+	}
+	
+	public void boxLvl1() {
+		//y;x 3;7
+		board[7][2] = new Box();
+		
+		board[2][5] = new Box();
+		board[4][5] = new Box();
+		board[7][5] = new Box();
+		
+		board[3][7] = new Box();
+		board[4][7] = new Box();
 	}
 	
 	public void moveCharacter(int i) {
