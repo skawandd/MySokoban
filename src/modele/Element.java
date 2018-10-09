@@ -33,4 +33,10 @@ public class Element {
 		}
 		return false;
 	}
+	
+	public boolean isWall() {
+		if(this.getElementId() == 1)
+			return true;
+		return false;
+	}
 }

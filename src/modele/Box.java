@@ -8,7 +8,7 @@ public class Box extends MobilElement {
 		this.locked = false;
 	}
 	
-	public Box(Boolean locked) {
+	public Box(boolean locked) {
 		super(3);
 		this.locked = locked;
 	}
@@ -17,7 +17,7 @@ public class Box extends MobilElement {
 		return this.locked;
 	}
 	
-	public void setBox(Boolean locked) {
+	public void setBox(boolean locked) {
 		this.locked = locked;
 	}
 
