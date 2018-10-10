@@ -150,6 +150,10 @@ public class Board {
 		board[4][7] = new Box();
 	}
 
+	public void moveMobilElement() {
+		
+	}
+	
 	public void upCharacter() {
 		int cell = 0;
 
@@ -216,6 +220,18 @@ public class Board {
 			// TODO
 		}
 	}
+	
+	public int getLengthX(){
+		return board[0].length;
+	}
+	
+	public int getLengthY() {
+		return board[1].length;
+	}
+	
+	public Element getElement(int x, int y) {
+		return board[y][x];
+	}
 
 	public void moveCharacter(int i) {
 
@@ -251,17 +267,6 @@ public class Board {
 		}
 	}
 
-	public void showBoard() {
-		System.out.println("=======================================");
-		for (int i1 = 0; i1 < board.length; ++i1) {
-			String out = "";
-			for (int i2 = 0; i2 < board[i1].length; ++i2) {
-				out += board[i1][i2].getElementId() + " ";
-			}
-			System.out.println(out);
-
-		}
-		System.out.println("=======================================");
-	}
+	
 
 }

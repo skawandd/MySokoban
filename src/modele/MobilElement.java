@@ -6,8 +6,6 @@ public class MobilElement extends Element {
 		super(id);
 	}
 	
-	
-	
 	public boolean checkMobility() {
 		
 		return true;

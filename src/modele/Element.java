@@ -3,6 +3,7 @@ package modele;
 public class Element {
 	private int id;
 	private int currentCell;
+	private int x, y;
 	
 	public Element(int id) {
 		this.id = id;

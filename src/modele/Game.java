@@ -36,7 +36,7 @@ public class Game {
 		while(true) {
 			new Menu(this).showInfo();
 			++moves;
-			this.getBoard().showBoard();
+			new Menu(this).showBoard();
 			this.getBoard().moveCharacter(new Menu(this).showMenu());
 		}
 	}
