@@ -1,4 +1,6 @@
-package modele;
+package controller;
+
+import modele.Game;
 
 public class MainClass {
 
