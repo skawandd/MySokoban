@@ -1,6 +1,12 @@
 package modele;
 import view.Menu;
 
+/**
+ * 
+ * @author Dylan
+ * 
+ * Handle the game phases
+ */
 public class Game {
 	private String playerName;
 	private Board board;

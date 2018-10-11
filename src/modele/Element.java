@@ -1,5 +1,10 @@
 package modele;
 
+/**
+ * 
+ * @author Dylan
+ * Generic Object to create Board's elements
+ */
 public class Element {
 	private int id;
 	private int currentCell;

@@ -1,5 +1,10 @@
 package modele;
 
+/**
+ * 
+ * @author Dylan
+ * The play board
+ */
 public class Board {
 	private Element[][] board;
 	private int characterX, characterY;
