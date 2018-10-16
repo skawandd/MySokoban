@@ -3,10 +3,12 @@ package modele;
 public class Element {
 	private int id;
 	private int currentCell;
+	private Point point;
 	private int x, y;
 	
 	public Element(int id) {
 		this.id = id;
+		this.currentCell = 0;
 	}
 	
 	public Element(int id, int currentCell) {
@@ -39,5 +41,22 @@ public class Element {
 		if(this.getElementId() == 1)
 			return true;
 		return false;
+	}
+	
+	public boolean isBox() {
+		if(this.getElementId() == 2 || this.getElementId() == 3)
+			return true;
+		return false;
+	}
+	
+	public boolean isObstacle() {
+		if(this.getElementId() == 1)
+			return true;
+		if(this.getElementId() == 2 || this.getElementId() == 3)
+			return true;
+		return false;
+	}
+	public Point getPoint() {
+		return this.point;
 	}
 }

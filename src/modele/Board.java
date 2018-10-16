@@ -15,7 +15,7 @@ public class Board {
 		wallsLv1();
 		goalsLv1();
 		boxLvl1();
-		board[8][11] = new Character(11,8); // add character
+		board[8][11] = new Character(11, 8); // add character
 		characterX = 11; // x=11 y=8
 		characterY = 8;
 	}
@@ -127,28 +127,53 @@ public class Board {
 
 	public void boxLvl1() {
 		// y;x 3;7
-		board[7][2] = new Box(2,7);
+		board[7][2] = new Box(2, 7);
 
-		board[2][5] = new Box(5,2);
-		board[4][5] = new Box(5,4);
-		board[7][5] = new Box(5,7);
+		board[2][5] = new Box(5, 2);
+		board[4][5] = new Box(5, 4);
+		board[7][5] = new Box(5, 7);
 
-		board[3][7] = new Box(7,3);
-		board[4][7] = new Box(7,4);
+		board[3][7] = new Box(7, 3);
+		board[4][7] = new Box(7, 4);
 	}
 
-	public void moveMobilElement(Character character, MobilElement mElement) {
-		
+	public void moveMobilElement(Element character, Element box, int move) {
+		int currentCell = -1;
+		switch (move) {
+		case 2:
+			if(!board[box.getPoint().getY()+1][box.getPoint().getX()].isObstacle()){
+				currentCell = board[box.getPoint().getY()+1][box.getPoint().getX()].getCurrentCell();
+				board[box.getPoint().getY()+1][box.getPoint().getX()] = new Box(box.getPoint().getX(), box.getPoint().getY()+1); //deplacement personnage
+				board[box.getPoint().getY()+1][box.getPoint().getX()].setCurrentCell(currentCell);
+				
+				downCharacter();
+				/*currentCell = board[box.getPoint().getY()][box.getPoint().getX()].getCurrentCell();
+				board[box.getPoint().getY()][box.getPoint().getX()] = new Character(box.getPoint().getX(), box.getPoint().getY());
+				board[box.getPoint().getY()][box.getPoint().getX()].setCurrentCell(currentCell);*/
+				
+				
+			}
+			break;
+		case 8:
+
+			break;
+		case 4:
+
+			break;
+		case 6:
+
+			break;
+
+		}
 	}
-	
+
 	public void upCharacter() {
 		int cell = 0;
 
 		System.out.println("Up");
 		// [y][x]
 		try {
-			board[characterY][characterX] = new Element(
-					board[characterY][characterX].getCurrentCell());
+			board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 			if (board[characterY - 1][characterX].isGoal()) {
 				board[--characterY][characterX] = new CharacterOnGoal(characterX, characterY);
 			} else
@@ -164,8 +189,7 @@ public class Board {
 		System.out.println("Down");
 		try {
 			cell = board[characterY + 1][characterX].getElementId();
-			board[characterY][characterX] = new Element(
-					board[characterY][characterX].getCurrentCell());
+			board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 			if (board[characterY + 1][characterX].isGoal()) {
 				board[++characterY][characterX] = new CharacterOnGoal(characterX, characterY);
 			} else
@@ -180,8 +204,7 @@ public class Board {
 		System.out.println("Left");
 		try {
 			cell = board[characterY][characterX - 1].getElementId();
-			board[characterY][characterX] = new Element(
-					board[characterY][characterX].getCurrentCell());
+			board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 			if (board[characterY][characterX - 1].isGoal()) {
 				board[characterY][--characterX] = new CharacterOnGoal(characterX, characterY);
 			} else
@@ -196,8 +219,7 @@ public class Board {
 		System.out.println("Right");
 		try {
 			cell = board[characterY][characterX + 1].getElementId();
-			board[characterY][characterX] = new Element(
-					board[characterY][characterX].getCurrentCell());
+			board[characterY][characterX] = new Element(board[characterY][characterX].getCurrentCell());
 			if (board[characterY][characterX + 1].isGoal()) {
 				board[characterY][++characterX] = new CharacterOnGoal(characterX, characterY);
 				System.out.println("OKKK");
@@ -207,15 +229,15 @@ public class Board {
 			// TODO
 		}
 	}
-	
-	public int getLengthX(){
+
+	public int getLengthX() {
 		return board[0].length;
 	}
-	
+
 	public int getLengthY() {
 		return board[1].length;
 	}
-	
+
 	public Element getElement(int x, int y) {
 		return board[y][x];
 	}
@@ -232,7 +254,9 @@ public class Board {
 			break;
 
 		case 2:
-			if (!board[characterY + 1][characterX].isWall()) {
+			if(board[characterY + 1][characterX].isBox()){
+				checkPlayerPos(board[characterY + 1][characterX]);
+			}else if (!board[characterY + 1][characterX].isWall()) {
 				downCharacter();
 			}
 			break;
@@ -254,6 +278,20 @@ public class Board {
 		}
 	}
 
-	
+	private void checkPlayerPos(Element mElement) {
+		if (mElement.getPoint().getX() == characterX && mElement.getPoint().getY() == characterY - 1) {
+			moveMobilElement(board[characterY][characterX], mElement, 8);
+		}
+		if (mElement.getPoint().getX() == characterX && mElement.getPoint().getY() == characterY + 1) {
+			moveMobilElement(board[characterY][characterX], mElement, 2);
+		}
+		if (mElement.getPoint().getX() == characterX - 1 && mElement.getPoint().getY() == characterY) {
+			moveMobilElement(board[characterY][characterX], mElement, 4);
+		}
+		if (mElement.getPoint().getX() == characterX + 1 && mElement.getPoint().getY() == characterY) {
+			moveMobilElement(board[characterY][characterX], mElement, 6);
+		}
+
+	}
 
 }

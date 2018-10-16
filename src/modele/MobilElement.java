@@ -12,6 +12,7 @@ public class MobilElement extends Element {
 	public Point getPoint() {
 		return this.point;
 	}
+	
 	/*
 	 * 
 	public MobilElement(int id) {
