@@ -147,20 +147,36 @@ public class Board {
 				board[box.getPoint().getY()+1][box.getPoint().getX()].setCurrentCell(currentCell);
 				
 				downCharacter();
-				/*currentCell = board[box.getPoint().getY()][box.getPoint().getX()].getCurrentCell();
-				board[box.getPoint().getY()][box.getPoint().getX()] = new Character(box.getPoint().getX(), box.getPoint().getY());
-				board[box.getPoint().getY()][box.getPoint().getX()].setCurrentCell(currentCell);*/
-				
-				
 			}
 			break;
 		case 8:
-
+			if(!board[box.getPoint().getY()-1][box.getPoint().getX()].isObstacle()){
+				currentCell = board[box.getPoint().getY()-1][box.getPoint().getX()].getCurrentCell();
+				board[box.getPoint().getY()-1][box.getPoint().getX()] = new Box(box.getPoint().getX(), box.getPoint().getY()-1); //deplacement personnage
+				board[box.getPoint().getY()-1][box.getPoint().getX()].setCurrentCell(currentCell);
+				
+				upCharacter();
+			}
+			
 			break;
 		case 4:
+			if(!board[box.getPoint().getY()][box.getPoint().getX()-1].isObstacle()){
+				currentCell = board[box.getPoint().getY()][box.getPoint().getX()-1].getCurrentCell();
+				board[box.getPoint().getY()][box.getPoint().getX()-1] = new Box(box.getPoint().getX()-1, box.getPoint().getY()); //deplacement personnage
+				board[box.getPoint().getY()][box.getPoint().getX()-1].setCurrentCell(currentCell);
+				
+				leftCharacter();
+			}
 
 			break;
 		case 6:
+			if(!board[box.getPoint().getY()][box.getPoint().getX()+6].isObstacle()){
+				currentCell = board[box.getPoint().getY()][box.getPoint().getX()+1].getCurrentCell();
+				board[box.getPoint().getY()][box.getPoint().getX()+1] = new Box(box.getPoint().getX()+1, box.getPoint().getY()); //deplacement personnage
+				board[box.getPoint().getY()][box.getPoint().getX()+1].setCurrentCell(currentCell);
+				
+				rightCharacter();
+			}
 
 			break;
 
@@ -248,7 +264,9 @@ public class Board {
 
 		case 1:
 
-			if (!board[characterY - 1][characterX].isWall()) {
+			if(board[characterY - 1][characterX].isBox()){
+				checkPlayerPos(board[characterY - 1][characterX]);
+			}else if (!board[characterY - 1][characterX].isWall()) {
 				upCharacter();
 			}
 			break;
@@ -262,13 +280,17 @@ public class Board {
 			break;
 
 		case 3:
-			if (!board[characterY][characterX - 1].isWall()) {
+			if (!board[characterY][characterX - 1].isBox()) {
+				checkPlayerPos(board[characterY][characterX - 1]);
+			}else if (!board[characterY][characterX - 1].isWall()) {
 				leftCharacter();
 			}
 			break;
 
 		case 4:
-			if (!board[characterY][characterX + 1].isWall()) {
+			if (!board[characterY][characterX + 1].isBox()) {
+				checkPlayerPos(board[characterY][characterX + 1]);
+			}else if (!board[characterY][characterX + 1].isWall()) {
 				rightCharacter();
 			}
 			break;
