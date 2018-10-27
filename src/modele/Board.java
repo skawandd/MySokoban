@@ -1,5 +1,11 @@
 package modele;
 
+import controller.tools.CSVElement;
+import java.io.FileNotFoundException;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  * 
  * @author Dylan
@@ -9,155 +15,59 @@ public class Board {
 	private Element[][] board;
 	private int characterX, characterY;
 	private Element nextCell;
+        
+        private int boardXSize = 20;
+        private int boardYSize = 20;
 
 	public Board() {
-		initWorld(1);
+            this.board = new Element[boardXSize][boardYSize];
+            int[][] csv;
+            //String path = "/Users/benjamin/Dropbox/0-ECE/JAVA_POO/Projet_Sokoban/MySokoban/src/view/niveau_1.csv";
+            String path = pick_CSVLevel();
+            System.out.println(path);
+            
+            try {
+                csv = CSVElement.readCSVFile(boardXSize, boardYSize, path);
+                int val;
+                
+                // Go through the array
+                for (int X = 0; X<boardXSize; X++){
+                    for (int Y = 0; Y<boardYSize; Y++){
+                        val = csv[X][Y];
+                        board[X][Y] = new Element(val);
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                System.err.println(ex.toString());
+            }
+            initWorld();           
+        }
+        
+        private String pick_CSVLevel(){
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileFilter(filter);
+            
+                int returnVal = chooser.showOpenDialog(null);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    return chooser.getSelectedFile().getAbsolutePath();
+                }
+    
+            return "";
+        }
+
+	public void initWorld() {
+            // TODO Specify start position in CSV
+            board[8][11] = new Character(0); // add character
+            // TODO Read character property from character !!!
+            characterX = 11; // x=11 y=8
+            characterY = 8;
 	}
-
-	public void initWorld(int i) {
-		board = new Element[20][20];
-		initFloor();
-		wallsLv1();
-		goalsLv1();
-		boxLvl1();
-		board[8][11] = new Character(0); // add character
-		characterX = 11; // x=11 y=8
-		characterY = 8;
-	}
-
-	private void wallsLv1() {
-		// [y][x]
-		board[5][0] = new Wall();
-		board[6][0] = new Wall();
-		board[7][0] = new Wall();
-
-		board[5][1] = new Wall();
-		board[5][2] = new Wall();
-
-		board[4][2] = new Wall();
-		board[3][2] = new Wall();
-
-		board[3][3] = new Wall();
-		board[3][4] = new Wall();
-
-		board[2][4] = new Wall();
-		board[1][4] = new Wall();
-		board[0][4] = new Wall();
-
-		board[0][5] = new Wall();
-		board[0][6] = new Wall();
-		board[0][7] = new Wall();
-
-		board[0][8] = new Wall();
-		board[1][8] = new Wall();
-		board[2][8] = new Wall();
-		board[3][8] = new Wall();
-
-		board[3][9] = new Wall();
-		board[4][9] = new Wall();
-		board[5][9] = new Wall();
-		board[6][9] = new Wall();
-
-		board[6][10] = new Wall();
-		board[6][11] = new Wall();
-		board[6][12] = new Wall();
-		board[6][13] = new Wall();
-
-		board[5][13] = new Wall();
-		board[5][14] = new Wall();
-		board[5][15] = new Wall();
-		board[5][16] = new Wall();
-		board[5][17] = new Wall();
-		board[5][18] = new Wall();
-
-		board[6][18] = new Wall();
-		board[7][18] = new Wall();
-		board[8][18] = new Wall();
-		board[9][18] = new Wall();
-
-		board[9][17] = new Wall();
-		board[9][16] = new Wall();
-		board[9][15] = new Wall();
-		board[9][14] = new Wall();
-		board[9][13] = new Wall();
-		board[9][12] = new Wall();
-		board[9][11] = new Wall();
-		board[9][10] = new Wall();
-
-		board[8][10] = new Wall();
-		board[8][12] = new Wall();
-		board[8][13] = new Wall();
-
-		board[10][10] = new Wall();
-		board[10][9] = new Wall();
-		board[10][8] = new Wall();
-		board[10][7] = new Wall();
-		board[10][6] = new Wall();
-		board[10][5] = new Wall();
-
-		board[9][5] = new Wall();
-		board[8][5] = new Wall();
-
-		board[8][4] = new Wall();
-		board[8][3] = new Wall();
-		board[8][2] = new Wall();
-		board[8][1] = new Wall();
-		board[8][0] = new Wall();
-
-		board[5][4] = new Wall();
-		board[6][4] = new Wall();
-
-		board[5][6] = new Wall();
-		board[6][6] = new Wall();
-		board[5][7] = new Wall();
-		board[6][7] = new Wall();
-	}
-
-	public void goalsLv1() {
-		board[6][17] = new Goal();
-		board[7][17] = new Goal();
-		board[8][17] = new Goal();
-		board[6][16] = new Goal();
-		board[7][16] = new Goal();
-		board[8][16] = new Goal();
-	}
-
-	public void initFloor() {
-		for (int i1 = 0; i1 < board[0].length; ++i1) {
-			for (int i2 = 0; i2 < board[0].length; ++i2) {
-				board[i1][i2] = new Floor();
-			}
-		}
-	}
-
-	// board[y][x]
-	public void initGoalTest() {
-		board[2][8] = new Goal();
-		board[2][9] = new Goal();
-		board[2][10] = new Goal();
-		board[2][11] = new Goal();
-
-		board[3][8] = new Goal();
-		board[3][9] = new Goal();
-		board[3][10] = new Goal();
-		board[3][11] = new Goal();
-	}
-
-	public void boxLvl1() {
-		// y;x 3;7
-		board[7][2] = new Box();
-
-		board[2][5] = new Box();
-		board[4][5] = new Box();
-		board[7][5] = new Box();
-
-		board[3][7] = new Box();
-		board[4][7] = new Box();
-	}
-
-	public void moveMobilElement() {
+        
+        /*
+        public void moveMobilElement() {
 		
-	}
+	}*/
 	
 	public void upCharacter() {
 		int cell = 0;
@@ -271,7 +181,4 @@ public class Board {
 			break;
 		}
 	}
-
-	
-
 }
