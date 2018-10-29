@@ -149,7 +149,7 @@ public class Board {
 				downCharacter();
 			}
 			break;
-		case 8:
+		case 1:
 			if(!board[box.getPoint().getY()-1][box.getPoint().getX()].isObstacle()){
 				currentCell = board[box.getPoint().getY()-1][box.getPoint().getX()].getCurrentCell();
 				board[box.getPoint().getY()-1][box.getPoint().getX()] = new Box(box.getPoint().getX(), box.getPoint().getY()-1); //deplacement personnage
@@ -159,7 +159,7 @@ public class Board {
 			}
 			
 			break;
-		case 4:
+		case 3:
 			if(!board[box.getPoint().getY()][box.getPoint().getX()-1].isObstacle()){
 				currentCell = board[box.getPoint().getY()][box.getPoint().getX()-1].getCurrentCell();
 				board[box.getPoint().getY()][box.getPoint().getX()-1] = new Box(box.getPoint().getX()-1, box.getPoint().getY()); //deplacement personnage
@@ -169,8 +169,8 @@ public class Board {
 			}
 
 			break;
-		case 6:
-			if(!board[box.getPoint().getY()][box.getPoint().getX()+6].isObstacle()){
+		case 4:
+			if(!board[box.getPoint().getY()][box.getPoint().getX()+1].isObstacle()){
 				currentCell = board[box.getPoint().getY()][box.getPoint().getX()+1].getCurrentCell();
 				board[box.getPoint().getY()][box.getPoint().getX()+1] = new Box(box.getPoint().getX()+1, box.getPoint().getY()); //deplacement personnage
 				board[box.getPoint().getY()][box.getPoint().getX()+1].setCurrentCell(currentCell);
@@ -280,7 +280,7 @@ public class Board {
 			break;
 
 		case 3:
-			if (!board[characterY][characterX - 1].isBox()) {
+			if (board[characterY][characterX - 1].isBox()) {
 				checkPlayerPos(board[characterY][characterX - 1]);
 			}else if (!board[characterY][characterX - 1].isWall()) {
 				leftCharacter();
@@ -288,7 +288,7 @@ public class Board {
 			break;
 
 		case 4:
-			if (!board[characterY][characterX + 1].isBox()) {
+			if (board[characterY][characterX + 1].isBox()) {
 				checkPlayerPos(board[characterY][characterX + 1]);
 			}else if (!board[characterY][characterX + 1].isWall()) {
 				rightCharacter();
@@ -302,16 +302,16 @@ public class Board {
 
 	private void checkPlayerPos(Element mElement) {
 		if (mElement.getPoint().getX() == characterX && mElement.getPoint().getY() == characterY - 1) {
-			moveMobilElement(board[characterY][characterX], mElement, 8);
+			moveMobilElement(board[characterY][characterX], mElement, 1);
 		}
 		if (mElement.getPoint().getX() == characterX && mElement.getPoint().getY() == characterY + 1) {
 			moveMobilElement(board[characterY][characterX], mElement, 2);
 		}
 		if (mElement.getPoint().getX() == characterX - 1 && mElement.getPoint().getY() == characterY) {
-			moveMobilElement(board[characterY][characterX], mElement, 4);
+			moveMobilElement(board[characterY][characterX], mElement, 3);
 		}
 		if (mElement.getPoint().getX() == characterX + 1 && mElement.getPoint().getY() == characterY) {
-			moveMobilElement(board[characterY][characterX], mElement, 6);
+			moveMobilElement(board[characterY][characterX], mElement, 4);
 		}
 
 	}
