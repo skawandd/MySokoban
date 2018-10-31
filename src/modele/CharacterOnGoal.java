@@ -1,10 +1,9 @@
 package modele;
 
-public class CharacterOnGoal extends Character {
+public class CharacterOnGoal extends Element {
 
-	public CharacterOnGoal(int x, int y) {
-		super(6, x, y);
-		this.setCurrentCell(4);
+	public CharacterOnGoal() {
+		super(6);
 	}
-	
+
 }

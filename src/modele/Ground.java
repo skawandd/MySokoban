@@ -1,10 +1,9 @@
 package modele;
 
-public class Box extends Element {
-
-	public Box(int id) {
+public class Ground extends Element{
+	
+	public Ground(int id) {
 		super(id);
 		// TODO Auto-generated constructor stub
 	}
-
 }
