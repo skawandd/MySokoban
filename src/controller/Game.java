@@ -1,7 +1,6 @@
 package controller;
 
-import modele.Board;
-
+import view.Menu;
 
 public class Game {
 	private Board board;

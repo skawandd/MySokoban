@@ -1,4 +1,14 @@
-package modele;
+package controller;
+
+import modele.BoxOnFloor;
+import modele.BoxOnGoal;
+import modele.Cell;
+import modele.Character;
+import modele.CharacterOnGoal;
+import modele.Empty;
+import modele.Floor;
+import modele.Goal;
+import modele.Wall;
 
 public class Board {
 	private Cell[][] board;
