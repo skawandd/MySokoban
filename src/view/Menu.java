@@ -11,15 +11,14 @@ public class Menu {
 		this.game = game;
 	}
 	
-	public int showMenu() {
-		System.out.println("1.Up    2.Down\n3.Left  4.Right\n===============\n");
-		Scanner sc = new Scanner(System.in); //TODO close scanner
-		return sc.nextInt();
+	public void showActions() {
+		System.out.println("1.Up    3.Left  | 5.Restart\n2.Down  4.Right | 6.Exit\n=======================================\n");
+	//	System.out.println("1.Up    2.Down\n3.Left  4.Right\n===============\n");
 	}
 	
-	public void showInfo() {
+	public void showInfo(String time) {
 		System.out.println("=======================================");
-		System.out.println("Lvl"+ game.getLvl()+" | Moves:"+game.getMoves()+" | Time: XX:XX"+" | "+game.getPlayerName()); //TODO timer
+		System.out.println("Lvl"+ game.getLvl()+" | Moves:"+game.getMoves()+" | Timer: "+time+" | "+game.getPlayerName()); //TODO timer
 	}
 	
 	public void showBoard() {

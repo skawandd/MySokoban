@@ -1,5 +1,9 @@
 package controller;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Scanner;
+
 import view.Menu;
 
 public class Game {
@@ -7,6 +11,8 @@ public class Game {
 	private int moves;
 	private int lvl = 1;
 	private String playerName = "Toto";
+	ZonedDateTime start;
+	
 	
 	public Game() {
 		this.board = new Board();
@@ -51,6 +57,13 @@ public class Game {
 	public void setMoves(int moves) {
 		this.moves = moves;
 	}
+	
+	public void askPlayerName() {
+		System.out.println("Enter name:");
+		Scanner sc = new Scanner(System.in);
+		this.playerName = sc.nextLine();
+		sc.close();
+	}
 
 	public String getPlayerName() {
 		return playerName;
@@ -58,6 +71,21 @@ public class Game {
 
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
+	}
+	
+	public String getStopWatch(long seconds){
+		int resultatEuclide = (int)seconds/60;
+		int reste = (int)seconds%60;
+		String buffer;
+		if(resultatEuclide < 10)
+			buffer = "0"+resultatEuclide;
+		else
+			buffer = ""+resultatEuclide;
+		if(reste < 10)
+			buffer += ":0"+reste;
+		else
+			buffer += ":"+reste;
+		return buffer;
 	}
 	
 	public boolean checkWin() {
@@ -76,18 +104,23 @@ public class Game {
 	}
 	
 	public void Play() {
+		this.start = ZonedDateTime.now();
+		Scanner sc = null;
 		boolean win = false;
 		moves = 0;
 		Menu menu = new Menu(this);
 		do {
-			menu.showInfo();
+			menu.showInfo(this.getStopWatch(start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)));
 			++moves;
 			menu.showBoard();
 			if(win = checkWin())
 				break;
-			this.getBoard().moveCharacter(menu.showMenu());
+			menu.showActions();
+			sc = new Scanner(System.in);
+			this.getBoard().moveCharacter(sc.nextInt());
 		}while(!win);
 		System.out.println("GG !!!");
+		sc.close();
 	}
 	
 }

@@ -9,6 +9,7 @@ import modele.Empty;
 import modele.Floor;
 import modele.Goal;
 import modele.Wall;
+import defaultPackage.MainClass; 
 
 public class Board {
 	private Cell[][] board;
@@ -167,7 +168,14 @@ public class Board {
 		case 4:
 			rightCharacter();
 			break;
-
+		
+		case 5:
+			MainClass.main(null);
+			break;
+			
+		case 6:
+			System.exit(0);
+			break;
 		}
 	}
 	
