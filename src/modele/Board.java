@@ -43,6 +43,11 @@ public class Board {
             initWorld();           
         }
         
+        /**
+         * @brief Ask the user to pick the level CSV file
+         * @author Francois
+         * @return String Absolute path to the CSV file
+         */
         private String pick_CSVLevel(){
             FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
             JFileChooser chooser = new JFileChooser();
@@ -56,6 +61,9 @@ public class Board {
             return "";
         }
 
+        /**
+         * @brief Init the character's position
+         */
 	public void initWorld() {
             // TODO Specify start position in CSV
             board[8][11] = new Character(0); // add character
