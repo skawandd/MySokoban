@@ -13,7 +13,7 @@ import defaultPackage.MainClass;
 
 public class Board {
 	private Cell[][] board;
-	private int characterX, characterY;
+	private int characterX, characterY, GoalNb;
 
 	public Board() {
 		this.board = new Cell[20][20];
@@ -25,6 +25,7 @@ public class Board {
 			initWallLvl1();
 			initBoxLvl1();
 			initGoalLvl1();
+			initGoalNb();
 			characterY = 8;
 			characterX = 11;
 			board[characterY][characterX].setElement(new Character());
@@ -148,6 +149,21 @@ public class Board {
 
 	public Cell[][] getMatrix() {
 		return this.board;
+	}
+
+	public void initGoalNb() {
+		int i = 0;
+		for (int i1 = 0; i1 < board[0].length; ++i1) {
+			for (int i2 = 0; i2 < board[0].length; ++i2) {
+				if(board[i1][i2].isGoal())
+					++i;
+			}
+		}
+		this.GoalNb = i;
+	}
+	
+	public int getGoalNb() {
+		return this.GoalNb;
 	}
 
 	public void moveCharacter(int i) {

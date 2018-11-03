@@ -9,8 +9,8 @@ import view.Menu;
 public class Game {
 	private Board board;
 	private int moves;
-	private int lvl = 1;
-	private String playerName = "Toto";
+	private int lvl = 1; //Init import CSV
+	private String playerName;
 	ZonedDateTime start;
 	
 	
@@ -73,9 +73,9 @@ public class Game {
 		this.playerName = playerName;
 	}
 	
-	public String getStopWatch(long seconds){
-		int resultatEuclide = (int)seconds/60;
-		int reste = (int)seconds%60;
+	public String getStopWatch(int seconds){
+		int resultatEuclide = seconds/60;
+		int reste = seconds%60;
 		String buffer;
 		if(resultatEuclide < 10)
 			buffer = "0"+resultatEuclide;
@@ -96,7 +96,7 @@ public class Game {
 					++i;
 			}
 		}
-		if(i == 6) {
+		if(i == board.getGoalNb()) {
 			return true;
 		}
 		
@@ -104,22 +104,26 @@ public class Game {
 	}
 	
 	public void Play() {
+		Menu menu = new Menu(this);
+		menu.askPlayerName();
+		Scanner sc = new Scanner(System.in);
+		this.playerName = sc.nextLine().toUpperCase();
+		if(this.playerName.length() > 6)
+			this.playerName = this.playerName.substring(0, 6);
 		this.start = ZonedDateTime.now();
-		Scanner sc = null;
 		boolean win = false;
 		moves = 0;
-		Menu menu = new Menu(this);
 		do {
-			menu.showInfo(this.getStopWatch(start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)));
-			++moves;
+			menu.showInfo(this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)));
 			menu.showBoard();
 			if(win = checkWin())
 				break;
+			++moves;
 			menu.showActions();
 			sc = new Scanner(System.in);
 			this.getBoard().moveCharacter(sc.nextInt());
 		}while(!win);
-		System.out.println("GG !!!");
+		menu.showVictory(playerName, this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)), moves);
 		sc.close();
 	}
 	
