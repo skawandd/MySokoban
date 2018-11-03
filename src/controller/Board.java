@@ -10,15 +10,77 @@ import modele.Floor;
 import modele.Goal;
 import modele.Wall;
 import defaultPackage.MainClass; 
+import controller.tools.CSVElement; 
+import java.io.FileNotFoundException;
 
 public class Board {
 	private Cell[][] board;
 	private int characterX, characterY, GoalNb;
+        
+        private int boardXSize = 20;
+        private int boardYSize = 20;
 
+        /*
 	public Board() {
 		this.board = new Cell[20][20];
-	}
+	}*/
+        
+        public Board() {
+            this.board = new Cell[boardXSize][boardYSize];
+            int[][] csv;
+            //String path = "/Users/benjamin/Dropbox/0-ECE/JAVA_POO/Projet_Sokoban/MySokoban/src/view/niveau_1.csv";
+            String path = CSVElement.pick_CSVLevel();
+            System.out.println(path);
+            
+            try {
+                csv = CSVElement.readCSVFile(boardXSize, boardYSize, path);
+                int val;
+                
+                // Go through the array
+                for (int X = 0; X<boardXSize; X++){
+                    for (int Y = 0; Y<boardYSize; Y++){
+                        val = csv[X][Y];
+                        Cell currentCell;
 
+                        //Init cell depending on CSV Content
+                        switch(val){
+                            default :
+                            case 0:
+                                currentCell = new Cell(new Empty(), new Floor());
+                                break;
+                            case 1:
+                                currentCell = new Cell(new Wall(), new Floor());                                
+                                break;
+                            case 2:
+                                currentCell = new Cell(new BoxOnFloor(), new Floor());
+                                break;
+                            case 3:
+                                currentCell = new Cell (new BoxOnGoal(), new Floor());
+                                break;
+                            case 4:
+                                currentCell = new Cell(new Empty(), new Goal());
+                                break;
+                            case 5:
+                                currentCell = new Cell(new Character(), new Floor());
+                                this.characterY = X;
+                                this.characterX = Y;
+                                break;
+                            case 6:
+                                currentCell = new Cell(new Character(), new Goal());
+                                break;
+                        }
+                        board[X][Y] = currentCell;
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                System.err.println(ex.toString());
+            }
+
+            initGoalNb();
+            //initWorld();           
+        }
+        
+        /*
 	public void initWorld(int lvl) {
 		if (lvl == 1) {
 			initFloorLvl1();
@@ -29,9 +91,10 @@ public class Board {
 			characterY = 8;
 			characterX = 11;
 			board[characterY][characterX].setElement(new Character());
-		}
-	}
-
+		}  
+	}*/
+        
+        /*
 	public void initFloorLvl1() {
 		for (int i1 = 0; i1 < board[0].length; ++i1) {
 			for (int i2 = 0; i2 < board[0].length; ++i2) {
@@ -40,6 +103,7 @@ public class Board {
 		}
 	}
 
+        
 	public void initWallLvl1() {
 		board[5][0].setElement(new Wall());
 		board[6][0].setElement(new Wall());
@@ -146,12 +210,13 @@ public class Board {
 		board[7][16].setFloor(new Goal());
 		board[8][16].setFloor(new Goal());
 	}
+        */
 
 	public Cell[][] getMatrix() {
 		return this.board;
 	}
 
-	public void initGoalNb() {
+	private void initGoalNb() {
 		int i = 0;
 		for (int i1 = 0; i1 < board[0].length; ++i1) {
 			for (int i2 = 0; i2 < board[0].length; ++i2) {

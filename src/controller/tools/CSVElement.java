@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 /**
@@ -57,9 +59,28 @@ public class CSVElement {
         }
 
         return ar_Board;
-  } 
+    }
+    
+            /**
+         * @brief Ask the user to pick the level CSV file
+         * @author Francois
+         * @return String Absolute path to the CSV file
+         */
+        public static String pick_CSVLevel(){
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
+            JFileChooser chooser = new JFileChooser("./src/view/levels");
+            chooser.setFileFilter(filter);
+            
+                int returnVal = chooser.showOpenDialog(null);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    return chooser.getSelectedFile().getAbsolutePath();
+                }
+    
+            return "";
+        }
     
     // TEST ONLY
+        /*
     public static void main (String[] args) throws IOException{
     String path_Mac = "/Users/benjamin/Dropbox/0-ECE/JAVA_POO/Projet_Sokoban/MySokoban/src/view/niveau_1.csv";
         
@@ -72,12 +93,11 @@ public class CSVElement {
             System.out.println("");
         }
         
-        /*
+        
         //https://stackoverflow.com/questions/28405833/change-color-of-output-text-in-netbeans-ide-window-and-clear-the-output-area
         String ANSI_RESET = "\u001B[0m";
         String ANSI_RED = "\u001B[31m";
         System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET + " texte noir");
-        */
-    }
+    }*/
         
 }
