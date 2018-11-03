@@ -121,7 +121,10 @@ public class Game {
 			++moves;
 			menu.showActions();
 			sc = new Scanner(System.in);
-			this.getBoard().moveCharacter(sc.nextInt());
+			try {
+				this.getBoard().moveCharacter(sc.nextInt());
+			} catch (Exception e) {
+			}
 		}while(!win);
 		menu.showVictory(playerName, this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)), moves);
 		sc.close();
