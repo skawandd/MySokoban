@@ -43,10 +43,11 @@ public class CSVElement {
                     char f_character;
 
                     try {
-                        f_character = (char)br.read();
-                        //If it's a Return or comma character from CSV, take the next one
-                        if(f_character == (char)'\n' || f_character == ',')
+                        //If it's CR/LF or ',' from CSV, take the next one
+                        do{
                             f_character = (char)br.read();
+                        }while(f_character == (char)'\n' || f_character == ',' || f_character == '\r' );
+                        // We need both '\n' and '\r' for Windows systems
                         
                         ar_Board[line][column] = Character.getNumericValue(f_character);
                     } catch (IOException ex) {
@@ -64,17 +65,17 @@ public class CSVElement {
             /**
          * @brief Ask the user to pick the level CSV file
          * @author Francois
-         * @return String Absolute path to the CSV file
+         * @return String Absolute path to the CSV file. Return Empty string if path is not valid
          */
         public static String pick_CSVLevel(){
             FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
             JFileChooser chooser = new JFileChooser("./src/view/levels");
             chooser.setFileFilter(filter);
             
-                int returnVal = chooser.showOpenDialog(null);
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    return chooser.getSelectedFile().getAbsolutePath();
-                }
+            int returnVal = chooser.showOpenDialog(null);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                return chooser.getSelectedFile().getAbsolutePath();
+            }
     
             return "";
         }
@@ -93,7 +94,7 @@ public class CSVElement {
             System.out.println("");
         }
         
-        
+        //COLORS
         //https://stackoverflow.com/questions/28405833/change-color-of-output-text-in-netbeans-ide-window-and-clear-the-output-area
         String ANSI_RESET = "\u001B[0m";
         String ANSI_RED = "\u001B[31m";
