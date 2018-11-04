@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
+import defaultPackage.MainClass;
 import view.Menu;
 
 public class Game {
@@ -74,17 +75,17 @@ public class Game {
 	}
 	
 	public String getStopWatch(int seconds){
-		int resultatEuclide = seconds/60;
-		int reste = seconds%60;
+		int euclide = seconds/60;
+		int rest = seconds%60;
 		String buffer;
-		if(resultatEuclide < 10)
-			buffer = "0"+resultatEuclide;
+		if(euclide < 10)
+			buffer = "0"+euclide;
 		else
-			buffer = ""+resultatEuclide;
-		if(reste < 10)
-			buffer += ":0"+reste;
+			buffer = ""+euclide;
+		if(rest < 10)
+			buffer += ":0"+rest;
 		else
-			buffer += ":"+reste;
+			buffer += ":"+rest;
 		return buffer;
 	}
 	
@@ -121,9 +122,15 @@ public class Game {
 			++moves;
 			menu.showActions();
 			sc = new Scanner(System.in);
-			this.getBoard().moveCharacter(sc.nextInt());
+			try {
+				this.getBoard().moveCharacter(sc.nextInt());
+			} catch (Exception e){
+			}
 		}while(!win);
 		menu.showVictory(playerName, this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)), moves);
+		menu.showRestart();
+		if(sc.nextInt() == 1)
+			MainClass.main(null);
 		sc.close();
 	}
 	
