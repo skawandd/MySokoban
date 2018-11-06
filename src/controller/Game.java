@@ -27,22 +27,6 @@ public class Game {
 		this.board = board;
 	}
 	
-	public void showBoard() {
-		System.out.println("=======================================");
-		for (int i1 = 0; i1 < board.getMatrix()[0].length; ++i1) {
-			String out = "";
-			for (int i2 = 0; i2 < board.getMatrix()[1].length; ++i2) {
-				if(board.getMatrix()[i1][i2].isEmpty())
-					out += board.getMatrix()[i1][i2].getFloor().getId() + " ";
-				else
-					out += board.getMatrix()[i1][i2].getElement().getId() + " ";
-			}
-			System.out.println(out);
-
-		}
-		System.out.println("=======================================");
-	}
-
 	public int getLvl() {
 		return lvl;
 	}

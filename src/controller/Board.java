@@ -19,6 +19,13 @@ public class Board {
         private int boardXSize = 20,
                 boardYSize = 20;
         
+        public static final class dir {
+            public static final int UP = 1;
+            public static final int DOWN = 2;
+            public static final int LEFT = 3;
+            public static final int RIGHT = 4;
+        }
+        
         public Board() {
             this.board = new Cell[boardXSize][boardYSize];
             int[][] csv;
@@ -78,17 +85,6 @@ public class Board {
 		return this.board;
 	}
 
-	private void initGoalNb() {
-		int i = 0;
-		for (int i1 = 0; i1 < board[0].length; ++i1) {
-			for (int i2 = 0; i2 < board[0].length; ++i2) {
-				if(board[i1][i2].isGoal())
-					++i;
-			}
-		}
-		this.GoalNb = i;
-	}
-	
 	public int getGoalNb() {
 		return this.GoalNb;
 	}
@@ -122,7 +118,18 @@ public class Board {
 		}
 	}
 	
-	public void upCharacter() {
+        private void initGoalNb() {
+        int i = 0;
+        for (int i1 = 0; i1 < board[0].length; ++i1) {
+                for (int i2 = 0; i2 < board[0].length; ++i2) {
+                        if(board[i1][i2].isGoal())
+                                ++i;
+                }
+        }
+        this.GoalNb = i;
+	}
+
+	private void upCharacter() {
 		if (board[characterY - 1][characterX].isBox() && board[characterY - 2][characterX].isFree()) {
 			board[characterY - 1][characterX].setElement(new Empty());
 			if(board[characterY - 2][characterX].isGoal())
@@ -139,7 +146,7 @@ public class Board {
 		}
 	}
 	
-	public void downCharacter() {
+	private void downCharacter() {
 		if (board[characterY + 1][characterX].isBox() && board[characterY + 2][characterX].isFree()) {
 			board[characterY + 1][characterX].setElement(new Empty());
 			if(board[characterY + 2][characterX].isGoal())
@@ -156,7 +163,7 @@ public class Board {
 		}
 	}
 	
-	public void rightCharacter() {
+	private void rightCharacter() {
 		if (board[characterY][characterX + 1].isBox() && board[characterY][characterX + 2].isFree()) {
 			board[characterY][characterX + 1].setElement(new Empty());
 			if(board[characterY][characterX + 2].isGoal())
@@ -173,7 +180,7 @@ public class Board {
 		}
 	}
 	
-	public void leftCharacter() {
+	private void leftCharacter() {
 		if (board[characterY][characterX - 1].isBox() && board[characterY][characterX - 2].isFree()) {
 			board[characterY][characterX - 1].setElement(new Empty());
 			if(board[characterY][characterX - 2].isGoal())
