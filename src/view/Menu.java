@@ -23,7 +23,11 @@ public class Menu {
 	}
 	
 	public void showVictory(String playerName, String time, int moves) {
-		System.out.println("Congrats " + playerName + " you won!\nYou made " + moves + " moves in " + time);
+		System.out.println("Congrats " + playerName + " you won!\nYou made " + moves + " moves in " + time+"\n");
+	}
+	
+	public void showRestart() {
+		System.out.println("Restart?\n1.Yes 2.No\n");
 	}
 	
 	public void showBoard() {
