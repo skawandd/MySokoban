@@ -26,7 +26,14 @@ public class Board {
             public static final int RIGHT = 4;
         }
         
-        public Board() {
+        public Board(){
+            this(20,20);
+        }
+        
+        public Board(int p_xSize, int p_ySize) {
+            this.boardXSize = p_xSize;
+            this.boardYSize = p_ySize;
+            
             this.board = new Cell[boardXSize][boardYSize];
             int[][] csv;
             String path = CSVElement.pick_CSVLevel();
