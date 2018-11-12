@@ -5,8 +5,7 @@
  */
 package controller.ia;
 
-import controller.Game;
-import controller.Board;
+import controller.ia.model.grid;
 import controller.ia.view.Display;
 import controller.tools.CSVElement;
 import java.io.FileNotFoundException;
@@ -19,29 +18,28 @@ import java.util.logging.Logger;
  */
 public class cpuPlayer {
     
-    private Board board;
+    private grid board;
     // private Game game;
     
     cpuPlayer(){
         //game = new Game();
         String path = CSVElement.pick_CSVLevel();
         try {
-            this.board = CSVElement.readCSVFile(6, 5, path);
+            this.board = new grid(CSVElement.readCSVFile(6, 5, path));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(cpuPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
-
-    public int[][] getBoard() {
-        return board;
-    }
     
     public static void main(String[] args){
         
         cpuPlayer cpu = new cpuPlayer();
-        Display.printBoard(6, 5, cpu.getBoard());
+        Display.printBoard(6, 5, cpu.getBoard().getGrid() );
         
     }
     
+    public grid getBoard() {
+        return this.board;
+    }
 }

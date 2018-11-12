@@ -35,7 +35,7 @@ public class Board {
             this.boardYSize = p_ySize;
             
             this.board = new Cell[boardXSize][boardYSize];
-            int[][] csv;
+            byte[][] csv;
             String path = CSVElement.pick_CSVLevel();
             System.out.println(path);
             

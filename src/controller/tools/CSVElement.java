@@ -29,9 +29,9 @@ public class CSVElement {
      * @param p_path : path to the level csv file
      * @return the CSV file as a {@code int[][]}
      */
-    public static int[][] readCSVFile(int p_nbColumn, int p_nbLine, String p_path) throws FileNotFoundException{
+    public static byte[][] readCSVFile(int p_nbColumn, int p_nbLine, String p_path) throws FileNotFoundException{
         
-        int[][] ar_Board = new int[p_nbColumn][p_nbLine];
+        byte[][] ar_Board = new byte[p_nbColumn][p_nbLine];
         File myCSV = new File(p_path);
         BufferedReader br;
         
@@ -49,7 +49,7 @@ public class CSVElement {
                         }while(f_character == (char)'\n' || f_character == ',' || f_character == '\r' );
                         // We need both '\n' and '\r' for Windows systems
                         
-                        ar_Board[column][line] = Character.getNumericValue(f_character);
+                        ar_Board[column][line] = (byte)Character.getNumericValue(f_character);
                     } catch (IOException ex) {
                         System.err.println(ex.toString());
                     }

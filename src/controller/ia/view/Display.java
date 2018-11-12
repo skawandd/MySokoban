@@ -36,7 +36,7 @@ public final class Display {
         
     }
     
-    public static void printBoard(int p_X, int p_Y, int[][] p_Board){
+    public static void printBoard(int p_X, int p_Y, byte[][] p_Board){
         char[] symbols = {'.','#','X','x','o','m','M'};
                       
         for(int y=0; y < p_Y; y++){
