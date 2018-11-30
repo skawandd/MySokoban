@@ -5,18 +5,23 @@ import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 import defaultPackage.MainClass;
+import javafx.application.Application;
 import view.Menu;
+import view.UserInterface;
 
-public class Game {
+public class Game implements Runnable{
 	private Board board;
 	private int moves;
 	private int lvl = 1; //Init import CSV
 	private String playerName;
-	ZonedDateTime start;
+	private ZonedDateTime start;
+	private String[] arguments;
 	
 	
-	public Game() {
+	public Game(String[] args) {
 		this.board = new Board();
+		this.arguments = args;
+		
 	}
 
 	public Board getBoard() {
@@ -116,6 +121,11 @@ public class Game {
 		if(sc.nextInt() == 1)
 			MainClass.main(null);
 		sc.close();
+	}
+
+	public void run() {
+		System.out.println("Thread");
+		Application.launch(UserInterface.class, this.arguments);
 	}
 	
 }

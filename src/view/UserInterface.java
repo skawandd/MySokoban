@@ -18,8 +18,16 @@ import javafx.stage.Stage;
 public class UserInterface extends Application {
 
 	@Override
-	public void start(Stage arg0) throws Exception {
-		
+	public void start(Stage primaryStage) {
+		try {
+			BorderPane root = new BorderPane();
+			Scene scene = new Scene(root, 400, 400);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

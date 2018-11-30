@@ -1,7 +1,7 @@
-package application;
+package view;
 
+import controller.Board;
 import javafx.application.Application;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -9,20 +9,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 //import javafx.scene.Group;
 //import javafx.scene.Parent;
+import javafx.stage.Stage;
 
-public class Main extends Application {
+/*public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
 			
-		//1. On met en place les éléments permettant de construire la matrice
+		//1. On met en place les ï¿½lï¿½ments permettant de construire la matrice
 			
 			primaryStage.setTitle("Mon Sokoban");
 			GridPane gridPane = new GridPane();
 			Board board = new Board();
 			Scene scene = new Scene(gridPane,400,400);
 			
-			//TODO : Faire correspondre les bons gifs aux bons éléments de l'id 0 à 6
+			//TODO : Faire correspondre les bons gifs aux bons ï¿½lï¿½ments de l'id 0 ï¿½ 6
 			
 			//Element sol id = 0
 			Image floor = new Image("ressources/floor.gif");
@@ -41,7 +42,7 @@ public class Main extends Application {
 			iv2.setImage(box);
 			Label labelBox = new Label();
 							
-			//Element caisse placée id = 3
+			//Element caisse placï¿½e id = 3
 			Image lockedBox = new Image("ressources/boxLocked.gif");
 			ImageView iv3 = new ImageView();
 			iv3.setImage(lockedBox);
@@ -63,16 +64,16 @@ public class Main extends Application {
 			Image perso = new Image("ressources/perso.gif");
 			ImageView iv5 = new ImageView();
 			iv5.setImage(perso);
-			Label labelPerso = new Label();*/
+			Label labelPerso = new Label();
 			
-			// 2. On récupére les proportions de la matrice que l'on souhaite représenter sur l'interface
+			// 2. On rï¿½cupï¿½re les proportions de la matrice que l'on souhaite reprï¿½senter sur l'interface
 			int xLength = board.getLengthX();
 			int yLength = board.getLengthY();
 			
 			// 3. On redimensionne la taille de la matrice
 			gridPane.resize(xLength, yLength);
 			
-			//On construit la matrice grace à la boucle et on ajoute une image en fonction de l'id de l'élément contenu dans la cellule
+			//On construit la matrice grace ï¿½ la boucle et on ajoute une image en fonction de l'id de l'ï¿½lï¿½ment contenu dans la cellule
 			
 			for(int x = 0; x < xLength; x++){
 				for(int y = 0; y < yLength ; y++){
@@ -104,7 +105,7 @@ public class Main extends Application {
 						
 					/*Perso on goal
 					if(board.getElement(x, y).getElementId() == 6)
-						gridPane.add(child, y, x);*/
+						gridPane.add(child, y, x);
 				
 				}
 				
@@ -228,7 +229,7 @@ private Parent createContent(){
 	iv2.setImage(box);
 	Label labelBox = new Label();
 					
-	//Element caisse placée id = 3
+	//Element caisse placï¿½e id = 3
 	Image lockedBox = new Image("ressources/boxLocked.gif");
 	ImageView iv3 = new ImageView();
 	iv3.setImage(lockedBox);
