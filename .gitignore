@@ -4,3 +4,4 @@ bin/
 manifest.mf
 nbbuild.xml
 nbproject/
+dist/
