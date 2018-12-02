@@ -122,7 +122,6 @@ public class CSVElement {
                 if(!isEndOfLine) csvSizeX++;
             }while(!isEndOfLine);
             // We need both '\n' and '\r' for Windows systems
-            System.out.println(csvSizeX);
 
             if(csvSizeX>0){
                 // Find Y;
@@ -136,8 +135,6 @@ public class CSVElement {
             this.setNbColumn(csvSizeX);
             this.setNbLine(csvSizeY);
 
-            byte[][] ar_Board = new byte[this.getNbColumn()][this.getNbLine()];
-            System.out.println(csvSizeY);
             return true;
         } catch (IOException ex) {
             System.err.println(ex.toString());

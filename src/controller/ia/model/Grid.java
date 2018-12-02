@@ -37,10 +37,12 @@ public class Grid implements Cloneable{
         String path = CSVElement.pick_CSVLevel();
         try {
             CSVElement csv = new CSVElement(path);
+            this.grid = csv.getCsvGrid();
             this.x_size = csv.getNbColumn();
             this.y_size = csv.getNbLine();
+            findCharacterPosition();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Erreur, impossible de lire le ficher");;
             this.x_size = 0;
             this.y_size = 0;
         }
@@ -66,23 +68,25 @@ public class Grid implements Cloneable{
      * @param direction
      * @return 
      */
-    public boolean moveCharacter(Move direction){
+    public MoveResult moveCharacter(Move direction){
         
         Position neighborTile = getNeighborPosition(this.getCharacterPosition(), direction);
         
         if (neighborTile == null)
-            return false;        
+            return MoveResult.BLOCKED;        
         else if(isCrossable(neighborTile)){
-            return moveItem(this.characterPosition, neighborTile);
+            moveItem(this.characterPosition, neighborTile);
+            return MoveResult.MOVED;
         }else if (isPushable(neighborTile, direction)){
             Position neighborNeighbor = getNeighborPosition(neighborTile, direction);
             if(neighborNeighbor == null)
-                return false;
+                return MoveResult.BLOCKED;
             boolean neighborWasMoved = moveItem(neighborTile,neighborNeighbor);
             boolean characterWasMoved = moveItem(this.characterPosition, neighborTile);
-            return (neighborWasMoved && characterWasMoved);
+            if(neighborWasMoved && characterWasMoved)
+                return MoveResult.PUSHED;
         }
-        return false;
+        return MoveResult.BLOCKED;
     }
     
     /**
@@ -168,25 +172,30 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * play an array of Move on the board
+     * @brief play an array of Move on the board
      * @param moveSequence 
-     * @param displayGrid : Should the grid be displayed after modification
      * @return false if a move was not successfull
      */
-    public boolean playSequence(List<Move> moveSequence, boolean displayGrid){
+    public MoveResult playSequence(List<Move> moveSequence){
         boolean playedOk;
-        for(Move move : moveSequence){
-            /*
-            if(!this.moveCharacter(move))
-                return false;
-            if(displayGrid)
-                Display.printBoard(this);*/
-            playedOk = this.moveCharacter(move);
-            Display.printBoard(this);
+        MoveResult previousResult = null, result = MoveResult.BLOCKED;
+        Move previousMove = null;
+        for(Move move : moveSequence){                
+            result = this.moveCharacter(move);
+            
+            //The character CAN NOT go back, EXCEPT if he just pushed a box
+            if((previousMove != null) && (move == previousMove.getOpposite()))
+                if(previousResult != MoveResult.PUSHED)
+                    return MoveResult.BLOCKED;
+            
+            playedOk = ((result == MoveResult.MOVED) || (result == MoveResult.PUSHED));
             if(!playedOk)
-                return false;
+                return MoveResult.BLOCKED;
+            previousMove = move;
+            previousResult = result;
         }
-        return true;
+        // We want to know if the player was pushing or moving during the LAST move.
+        return result;
     }
     
     /**
