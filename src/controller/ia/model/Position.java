@@ -18,6 +18,10 @@ public final class Position {
         this.setX(p_x);
         this.setY(p_y);
     }
+    public Position(Position p_position){
+        this.setX(p_position.getX());
+        this.setY(p_position.getY());
+    }
     
     public int getX() {
         return X;
