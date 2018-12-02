@@ -6,7 +6,11 @@
 package controller.ia.model;
 
 import controller.ia.view.Display;
+import controller.tools.CSVElement;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,8 +19,8 @@ import java.util.List;
 public class Grid implements Cloneable{
     
     private byte[][] grid;
-    private final int x_size;
-    private final int y_size;
+    private int x_size;
+    private int y_size;
     private final int[] pushable = {Tile.BOX,Tile.BOX_ON_GOAL};
     private final int[] crossable ={Tile.SOL,Tile.GOAL};
     private Position characterPosition;
@@ -27,6 +31,19 @@ public class Grid implements Cloneable{
         this.y_size = p_y;
         // Ensure the Grid is secure
         findCharacterPosition();
+    }
+    public Grid(){
+        // CSVElement.readCSVFile(6, 5, path),6,5
+        String path = CSVElement.pick_CSVLevel();
+        try {
+            CSVElement csv = new CSVElement(path);
+            this.x_size = csv.getNbColumn();
+            this.y_size = csv.getNbLine();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Grid.class.getName()).log(Level.SEVERE, null, ex);
+            this.x_size = 0;
+            this.y_size = 0;
+        }
     }
         
     public int getX() {

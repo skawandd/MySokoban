@@ -20,6 +20,34 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class CSVElement {
     
+    private int nbLine;
+    private int nbColumn;
+    byte[][] csvGrid;
+
+    public final void setNbLine(int nbLine) {
+        this.nbLine = nbLine;
+    }
+
+    public final void setNbColumn(int nbColumn) {
+        this.nbColumn = nbColumn;
+    }
+
+    public void setCsvGrid(byte[][] csvGrid) {
+        this.csvGrid = csvGrid;
+    }
+
+    public final int getNbLine() {
+        return nbLine;
+    }
+
+    public final int getNbColumn() {
+        return nbColumn;
+    }
+
+    public byte[][] getCsvGrid() {
+        return csvGrid;
+    }
+    
     /**
      * @brief This function create a char array from a CSV file.
      * Size of the array must be specified
@@ -28,18 +56,34 @@ public class CSVElement {
      * @param p_nbLine : Line number (Y)
      * @param p_path : path to the level csv file
      * @return the CSV file as a {@code int[][]}
-     */
+     */    
     public static byte[][] readCSVFile(int p_nbColumn, int p_nbLine, String p_path) throws FileNotFoundException{
+        CSVElement csv = new CSVElement(p_path);
+        return csv.getCsvGrid();
+    }
+    
+    /**
+     * @brief CSVElement constructor from a CSV file.
+     * Size of the array must be specified
+     * @throws FileNotFoundException
+     * @param p_path : path to the level csv file
+     */
+    public CSVElement(String p_path) throws FileNotFoundException{
         
-        byte[][] ar_Board = new byte[p_nbColumn][p_nbLine];
         File myCSV = new File(p_path);
         BufferedReader br;
         
+        if(!initXandY(myCSV))
+                return;
+        
         try {
+           // Get x and y size of the CSV
+                        
             br = new BufferedReader(new FileReader(myCSV));
+            this.csvGrid = new byte[nbColumn][nbLine];
             
-            for (int line = 0; line < p_nbLine ; line++){
-                for (int column = 0; column < p_nbColumn; column++){
+            for (int line = 0; line < nbLine ; line++){
+                for (int column = 0; column < nbColumn; column++){
                     char f_character;
 
                     try {
@@ -49,7 +93,7 @@ public class CSVElement {
                         }while(f_character == (char)'\n' || f_character == ',' || f_character == '\r' );
                         // We need both '\n' and '\r' for Windows systems
                         
-                        ar_Board[column][line] = (byte)Character.getNumericValue(f_character);
+                        this.csvGrid[column][line] = (byte)Character.getNumericValue(f_character);
                     } catch (IOException ex) {
                         System.err.println(ex.toString());
                     }
@@ -58,27 +102,67 @@ public class CSVElement {
         } catch (FileNotFoundException ex) {
                         System.err.println(ex.toString());
         }
-
-        return ar_Board;
     }
     
-            /**
-         * @brief Ask the user to pick the level CSV file
-         * @author Francois
-         * @return String Absolute path to the CSV file. Return Empty string if path is not valid
-         */
-        public static String pick_CSVLevel(){
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
-            JFileChooser chooser = new JFileChooser("./src/view/levels");
-            chooser.setFileFilter(filter);
-            
-            int returnVal = chooser.showOpenDialog(null);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-                return chooser.getSelectedFile().getAbsolutePath();
-            }
-    
-            return "";
+    private boolean initXandY(File myCSV){
+        
+        BufferedReader br;
+        
+        try {
+            br = new BufferedReader(new FileReader(myCSV));
+            byte csvSizeX = 0;
+            byte csvSizeY = -1;
+            char f_character;
+            boolean isEndOfLine;
+            //If it's CR/LF or ',' from CSV, take the next one
+            do{
+                f_character = (char)br.read();
+                if (f_character == ',') f_character = (char)br.read();
+                isEndOfLine = (f_character == (char)'\n' || f_character == '\r');
+                if(!isEndOfLine) csvSizeX++;
+            }while(!isEndOfLine);
+            // We need both '\n' and '\r' for Windows systems
+            System.out.println(csvSizeX);
+
+            if(csvSizeX>0){
+                // Find Y;
+                br = new BufferedReader(new FileReader(myCSV));
+                String line;
+                do{
+                    line = br.readLine();
+                    csvSizeY++;
+                }while(line != null);
+            } else return false;
+            this.setNbColumn(csvSizeX);
+            this.setNbLine(csvSizeY);
+
+            byte[][] ar_Board = new byte[this.getNbColumn()][this.getNbLine()];
+            System.out.println(csvSizeY);
+            return true;
+        } catch (IOException ex) {
+            System.err.println(ex.toString());
+            return false;
         }
+        
+    }
+    
+    /**
+     * @brief Ask the user to pick the level CSV file
+     * @author Francois
+     * @return String Absolute path to the CSV file. Return Empty string if path is not valid
+     */
+    public static String pick_CSVLevel(){
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
+        JFileChooser chooser = new JFileChooser("./src/view/levels");
+        chooser.setFileFilter(filter);
+
+        int returnVal = chooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            return chooser.getSelectedFile().getAbsolutePath();
+        }
+
+        return "";
+    }
     
     // TEST ONLY
         /*
