@@ -5,46 +5,92 @@
  */
 package controller.ia.model;
 
+import controller.ia.view.Display;
 import java.util.List;
 
 /**
  *
  * @author Francois
  */
-public class Grid {
+public class Grid implements Cloneable{
     
     private byte[][] grid;
-    private final int x;
-    private final int y;
+    private final int x_size;
+    private final int y_size;
     private final int[] pushable = {Tile.BOX,Tile.BOX_ON_GOAL};
     private final int[] crossable ={Tile.SOL,Tile.GOAL};
-    
     private Position characterPosition;
-
+    
+    public Grid(byte[][] p_Board, int p_x, int p_y){
+        this.grid = p_Board;
+        this.x_size = p_x;
+        this.y_size = p_y;
+        // Ensure the Grid is secure
+        findCharacterPosition();
+    }
+        
     public int getX() {
-        return x;
+        return x_size;
     }
     public int getY() {
-        return y;
-    }
-
-    private void setCharacterPosition(Position characterPosition) {
-        this.characterPosition = characterPosition;
+        return y_size;
     }
     public Position getCharacterPosition() {
         return characterPosition;
     }
-    
     public byte[][] getGrid() {
         return this.grid;
     }
+    public boolean hasWon(){
+        return (this.getEmptyGoalsLeft() == 0);
+    }
+    /**
+     * @brief Move character in given direction
+     * @param direction
+     * @return 
+     */
+    public boolean moveCharacter(Move direction){
+        
+        Position neighborTile = getNeighborPosition(this.getCharacterPosition(), direction);
+        
+        if (neighborTile == null)
+            return false;        
+        else if(isCrossable(neighborTile)){
+            return moveItem(this.characterPosition, neighborTile);
+        }else if (isPushable(neighborTile, direction)){
+            Position neighborNeighbor = getNeighborPosition(neighborTile, direction);
+            if(neighborNeighbor == null)
+                return false;
+            boolean neighborWasMoved = moveItem(neighborTile,neighborNeighbor);
+            boolean characterWasMoved = moveItem(this.characterPosition, neighborTile);
+            return (neighborWasMoved && characterWasMoved);
+        }
+        return false;
+    }
     
-    public Grid(byte[][] p_Board, int p_x, int p_y){
-        this.grid = p_Board;
-        this.x = p_x;
-        this.y = p_y;
-        // Ensure the Grid is secure
-        findInitialCharacterPosition();
+    /**
+     * @brief returns a brand new Grid with its own byte Array
+     * @return Grid
+     */
+    @Override
+    public Grid clone(){
+        {
+            Grid newGrid = new Grid(
+                    copy2DByteArray(this.getGrid()),
+                    this.getX(),this.getY());
+            return newGrid;
+        }
+    }
+    
+    /**
+     * @brief Grid setter
+     * @param p_grid 
+     */
+    private void setGrid(byte[][] p_grid){
+        this.grid = p_grid;
+    }
+    private void setCharacterPosition(Position characterPosition) {
+        this.characterPosition = characterPosition;
     }
     
     private byte getItem(Position p_position){
@@ -55,9 +101,9 @@ public class Grid {
         this.grid[position.getX()][position.getY()] = item;
     }
     
-    private void findInitialCharacterPosition(){
-        for(int var_y=0; var_y < this.y; var_y++){
-            for(int var_x = 0; var_x < this.x; var_x++){
+    private void findCharacterPosition(){
+        for(int var_y=0; var_y < this.y_size; var_y++){
+            for(int var_x = 0; var_x < this.x_size; var_x++){
                 int itemInGrid = this.grid[var_x][var_y];
                 if(itemInGrid == 5 || itemInGrid == 6){
                     this.characterPosition = new Position(var_x,var_y);
@@ -70,10 +116,10 @@ public class Grid {
     
     private int getEmptyGoalsLeft(){
         int nbEmptyGoals = 0;
-        for(int var_y=0; var_y < this.y; var_y++){
-            for(int var_x = 0; var_x < this.x; var_x++){
+        for(int var_y=0; var_y < this.y_size; var_y++){
+            for(int var_x = 0; var_x < this.x_size; var_x++){
                 int itemInGrid = this.grid[var_x][var_y];
-                if(itemInGrid == 4){
+                if(itemInGrid == 4 || itemInGrid == 6){
                     nbEmptyGoals++;
                 }
             }
@@ -81,12 +127,12 @@ public class Grid {
         return nbEmptyGoals;
     }
     
-    public boolean hasWon(){
-        return (getEmptyGoalsLeft() == 0);
-    }
-
-// getBoxesOnGround
-       
+    /**
+     * @brief Gives you a tile's neighbor. 
+     * @param p_pos the position you want to get the neighboor of
+     * @param direction the direction of the neighbor
+     * @return Position or null if not found
+     */
     private Position getNeighborPosition(Position p_pos, Move direction){
         int x = p_pos.getX();
         int y = p_pos.getY();
@@ -104,37 +150,35 @@ public class Grid {
         return null;
     }
     
-    public boolean moveCharacter(Move direction){
-        
-        Position neighborTile = getNeighborPosition(this.getCharacterPosition(), direction);
-        
-        if(isCrossable(neighborTile)){
-            moveItem(this.characterPosition, neighborTile);
-            return true;
-        }else if (isPushable(neighborTile, direction)){
-            Position neighborNeighbor = getNeighborPosition(neighborTile, direction);
-            moveItem(neighborTile,neighborNeighbor);
-            moveItem(this.characterPosition, neighborTile);
-            return true;
-        } else {
-            return false;
-        }
-        // TODO : handle out of grid
-    }
-        /**
+    /**
      * play an array of Move on the board
      * @param moveSequence 
+     * @param displayGrid : Should the grid be displayed after modification
      * @return false if a move was not successfull
      */
-    public boolean playSequence(List<Move> moveSequence){
+    public boolean playSequence(List<Move> moveSequence, boolean displayGrid){
+        boolean playedOk;
         for(Move move : moveSequence){
+            /*
             if(!this.moveCharacter(move))
+                return false;
+            if(displayGrid)
+                Display.printBoard(this);*/
+            playedOk = this.moveCharacter(move);
+            Display.printBoard(this);
+            if(!playedOk)
                 return false;
         }
         return true;
     }
     
-    private void moveItem(final Position originTilePosition, final Position targetTilePosition){
+    /**
+     * @brief Moves Mario or a box on the grid
+     * @param originTilePosition
+     * @param targetTilePosition 
+     * @return false if move was not possible
+     */
+    private boolean moveItem(final Position originTilePosition, final Position targetTilePosition){
         boolean isBox = false, isMario = false;
         // originTile moved can be character OR box
         byte originTileOldValue = getItem(originTilePosition);
@@ -157,14 +201,13 @@ public class Grid {
                 isBox = true;
                 break;
             default :
-                originTileNewValue = Tile.SOL;
                 System.err.println("Character old position error");
-                break;
+                return false;
         }
 
         // Set character on new tile
         byte targetTileOldValue = this.getItem(targetTilePosition);
-        byte targetTileNewValue = 0;
+        byte targetTileNewValue = -1;
         switch(targetTileOldValue){
             case Tile.SOL:
                 if(isMario)
@@ -183,9 +226,8 @@ public class Grid {
                     System.out.println("Character new pos error");
                 break;
             default:
-                targetTileNewValue = Tile.MARIO;
-                System.out.println("Character new pos error");
-                break;
+                System.err.println("Character new pos error");
+                return false;
         }
 
         //The exchange in itself
@@ -193,9 +235,18 @@ public class Grid {
         setItem(targetTilePosition, targetTileNewValue);
         if(isMario)
             this.setCharacterPosition(targetTilePosition);
+        return true;
     }
     
+    /**
+     * @brief Tells you if a Tile is crossable
+     * @param tile
+     * @return boolean 
+     */
     private boolean isCrossable(Position tile){
+        if (tile == null)
+            return false;
+            
         for(int i : this.crossable){
             if(this.getItem(tile) == i)
                 return true;
@@ -203,14 +254,36 @@ public class Grid {
         return false;
     }
     
+    /**
+     * @brief tells if an object is pushable in the given direction
+     * @param tile
+     * @param direction
+     * @return true if the object can be pushed in the given direction
+     */
     private boolean isPushable(Position tile, Move direction){
+        int item = this.getItem(tile);
         for(int i : this.pushable){
-            if(this.getItem(tile) == i){
-                boolean neighborIsCrossable = isCrossable(this.getNeighborPosition(tile, direction));
+            if(item == i){
+                Position neighborPosition = this.getNeighborPosition(tile, direction);
+                boolean neighborIsCrossable = isCrossable(neighborPosition);
                 if(neighborIsCrossable)
                     return true;
             }
         }
         return false;
+    }
+    
+    /**
+     * @brief Copies originalArray and return a brand new copy.
+     * @param originalArray
+     * @return byte[][] the copy
+     */
+    private byte[][] copy2DByteArray(final byte[][] originalArray){
+        byte[][] copyArray = new byte[originalArray.length][];
+        for(int i = 0; i < copyArray.length; i++){
+            copyArray[i] = new byte[originalArray[i].length];
+            System.arraycopy(originalArray[i], 0, copyArray[i], 0, copyArray[i].length);
+        }
+        return copyArray;
     }
 }
