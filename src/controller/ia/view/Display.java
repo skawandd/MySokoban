@@ -17,7 +17,7 @@ public final class Display {
         int p_X = grid.getX(),
                 p_Y = grid.getY();
         byte[][] p_Board = grid.getGrid();
-        char[] symbols = {'.','#','X','x','o','m','M'};
+        char[] symbols = {'.','#','x','X','o','m','M'};
                       
         for(int y=0; y < p_Y; y++){
             for(int x = 0; x < p_X; x++){
