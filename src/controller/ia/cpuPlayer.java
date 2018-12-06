@@ -27,9 +27,15 @@ public class cpuPlayer {
     public static void main(String[] args){
         
         cpuPlayer cpu = new cpuPlayer();        
-        
+
+
+        long tStart = System.currentTimeMillis();        
         List<Move> answer = cpu.generateMove();
-        
+        long tEnd = System.currentTimeMillis();
+        long tDelta = tEnd - tStart;
+        double elapsedSeconds = tDelta / 1000.0;
+        System.out.println("This took : "+tDelta+" milliseconds or "+elapsedSeconds+" seconds");
+       
 
         Display.printBoard(cpu.getBoard());
         if(answer != null){
