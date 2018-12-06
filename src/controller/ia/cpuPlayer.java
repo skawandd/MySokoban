@@ -8,6 +8,7 @@ package controller.ia;
 import controller.ia.model.Grid;
 import controller.ia.model.Move;
 import controller.ia.model.MoveResult;
+import controller.ia.model.TreeNode;
 import controller.ia.view.Display;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +29,22 @@ public class cpuPlayer {
         
         cpuPlayer cpu = new cpuPlayer();        
         
-        List<Move> answer = cpu.generateMove();
+        TreeNode answer = cpu.generateMove();
         
 
         Display.printBoard(cpu.getBoard());
         if(answer != null){
             System.out.println("Success !");
-            cpu.printSequence(answer);
+            cpu.printSequence(answer.getMoveList());
         }
-        cpu.getBoard().playSequence(answer);
+        cpu.getBoard().playSequence(answer.getMoveList());
         Display.printBoard(cpu.getBoard());
         
     }
         
-    private List<Move> generateMove(){
-        List<List<Move>> theList = new ArrayList<>();
+    private TreeNode generateMove(){
+        //List<List<Move>> theList = new ArrayList<>();
+        List<TreeNode> arL_treeNodes = new ArrayList<>();
         
         Grid testBoard;
         Grid motherBoard = this.getBoard();
@@ -59,16 +61,18 @@ public class cpuPlayer {
             if(isSequenceOk){
                 List<Move> listToAdd = new ArrayList<>();
                 listToAdd.add(moveToTry);
-                theList.add(listToAdd);
+                TreeNode newNode = new TreeNode(listToAdd,testBoard);
+                //theList.add(listToAdd);
+                arL_treeNodes.add(newNode);
             }
             //Display.printBoard(testBoard);
         }
-        if(theList.isEmpty()){
+        if(arL_treeNodes.isEmpty()){
             System.err.println("Unable to make first Move, cherck the grid");
             return null;
         } else {
             //return null;
-            return generateMoveN1(theList,1);
+            return generateMoveN1(arL_treeNodes,1);
         }
     }
     /**
@@ -76,36 +80,38 @@ public class cpuPlayer {
      * @param previousMovesList 
      * @return 
      */
-    private List<Move> generateMoveN1( List<List<Move>> previousMovesList, int level){
+    private TreeNode generateMoveN1( List<TreeNode> p_treeNodes, int level){
         level++;
         System.out.println("Level :" + level);
-        List<List<Move>> okMoveSequenceList = new ArrayList<>();
+        List<TreeNode> okNodeList = new ArrayList<>();
         List<Move> testList ;
         Grid testBoard;
         MoveResult result;
         
-        for(List<Move> moveList : previousMovesList){
+        for(TreeNode node : p_treeNodes){
             
             boolean atLeastOneMovePossible = false;
             for(Move move : Move.values()){
-                testBoard = this.getBoard().clone();
-                testList = copyMoveList(moveList);
-                testList.add(move);
-                result = testBoard.playSequence(testList);
-                boolean isSequenceOk = (!(result == MoveResult.BLOCKED));
+                testBoard = node.getGrid().clone();
+                testList = copyMoveList(node.getMoveList());
                 
-                if(isSequenceOk){
+                testList.add(move);
+                result = testBoard.moveCharacter(move);
+                boolean isMovePossible = (!(result == MoveResult.BLOCKED));
+                
+                if(isMovePossible){
                     atLeastOneMovePossible = true;
+                    TreeNode newNode = new TreeNode(testList,testBoard);
                     //printSequence(testList);
                     if(testBoard.hasWon())
-                        return testList;
+                        return newNode;
                     else
-                        okMoveSequenceList.add(testList);
+                        okNodeList.add(newNode);
                 }
             }
             //if(atLeastOneMovePossible) maybe useless
         }
-        List<Move> answer = generateMoveN1(okMoveSequenceList, level);
+        TreeNode answer = generateMoveN1(okNodeList, level);
         return answer;
     }
     
