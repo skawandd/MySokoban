@@ -52,7 +52,7 @@ public class cpuPlayer {
         
         Grid testBoard;
         Grid motherBoard = this.getBoard();
-        boolean isSequenceOk;
+        boolean isMoveOk;
         // The code for first initialisation is duplicated
         // We don't want to make this each time in genMove
         for(Move moveToTry : Move.values()){
@@ -60,9 +60,9 @@ public class cpuPlayer {
             //System.out.println(moveToTry);
 
             MoveResult result = testBoard.moveCharacter(moveToTry);
-            isSequenceOk = (!(result == MoveResult.BLOCKED));
+            isMoveOk = (!(result == MoveResult.BLOCKED));
             
-            if(isSequenceOk){
+            if(isMoveOk){
                 List<Move> listToAdd = new ArrayList<>();
                 listToAdd.add(moveToTry);
                 TreeNode newNode = new TreeNode(listToAdd,testBoard);

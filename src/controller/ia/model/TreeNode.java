@@ -18,7 +18,7 @@ public class TreeNode {
     
     public TreeNode(List<Move> p_moves, Grid p_grid){
         this.moveList = p_moves;
-        this.grid = p_grid.clone();
+        this.grid = p_grid;
     }
 
     public List<Move> getMoveList() {
