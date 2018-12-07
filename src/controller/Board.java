@@ -88,6 +88,10 @@ public class Board {
 	public int getGoalNb() {
 		return this.GoalNb;
 	}
+	
+	public int getElement(int x, int y){
+		return this.board[y][x].getElement().getId();
+	}
 
 	public void moveCharacter(int i) {
 		switch (i) {

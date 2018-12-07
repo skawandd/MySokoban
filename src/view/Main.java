@@ -8,10 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 //import javafx.scene.Group;
-//import javafx.scene.Parent;
 import javafx.stage.Stage;
 
-/*public class Main extends Application {
+public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -72,40 +71,41 @@ import javafx.stage.Stage;
 			
 			// 3. On redimensionne la taille de la matrice
 			gridPane.resize(xLength, yLength);
+			*/
 			
 			//On construit la matrice grace � la boucle et on ajoute une image en fonction de l'id de l'�l�ment contenu dans la cellule
 			
-			for(int x = 0; x < xLength; x++){
-				for(int y = 0; y < yLength ; y++){
+			for(int x = 0; x < board.getMatrix()[0].length; x++){
+				for(int y = 0; y < board.getMatrix()[1].length ; y++){
 					
 					//Floor
-					if(board.getElement(x, y).getElementId() == 0)
+					if(board.getElement(x, y) == 0)
 						gridPane.add(iv0, y, x);
 					
 					//Wall
-					if(board.getElement(x, y).getElementId() == 1)
+					if(board.getElement(x, y) == 1)
 						gridPane.add(iv1, y, x);
 						
 						
 					//Box
-					if(board.getElement(x, y).getElementId() == 2)
+					if(board.getElement(x, y) == 2)
 						gridPane.add(iv2, y, x);
 						
 					//LockedBox
-					if(board.getElement(x, y).getElementId() == 3)
+					if(board.getElement(x, y) == 3)
 						gridPane.add(iv3, y, x);
 						
 					//Goal
-					if(board.getElement(x, y).getElementId() == 4)
+					if(board.getElement(x, y) == 4)
 						gridPane.add(iv4, y, x);
 						
 					//Perso
-					if(board.getElement(x, y).getElementId() == 5)
+					if(board.getElement(x, y) == 5)
 						gridPane.add(iv5, y, x);
 						
 					/*Perso on goal
 					if(board.getElement(x, y).getElementId() == 6)
-						gridPane.add(child, y, x);
+						gridPane.add(child, y, x);*/
 				
 				}
 				

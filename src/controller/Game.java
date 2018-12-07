@@ -18,9 +18,9 @@ public class Game implements Runnable{
 	private String[] arguments;
 	
 	
-	public Game(String[] args) {
+	public Game(/*String[] args*/) {
 		this.board = new Board();
-		this.arguments = args;
+	//	this.arguments = args;
 		
 	}
 
@@ -124,8 +124,11 @@ public class Game implements Runnable{
 	}
 
 	public void run() {
-		System.out.println("Thread");
-		Application.launch(UserInterface.class, this.arguments);
+		try {
+			System.out.println("Thread");
+			this.Play();
+		} catch (Exception e) {
+		}
 	}
 	
 }
