@@ -24,6 +24,11 @@ public class Grid implements Cloneable{
     private final int[] pushable = {Tile.BOX,Tile.BOX_ON_GOAL};
     private final int[] crossable ={Tile.SOL,Tile.GOAL};
     private Position characterPosition;
+    private int nbMoves;
+
+    public int getNbMoves() {
+        return nbMoves;
+    }
     
     public Grid(byte[][] p_Board, int p_x, int p_y){
         this.grid = p_Board;
@@ -76,6 +81,7 @@ public class Grid implements Cloneable{
             return MoveResult.BLOCKED;        
         else if(isCrossable(neighborTile)){
             moveItem(this.characterPosition, neighborTile);
+            this.nbMoves++;
             return MoveResult.MOVED;
         }else if (isPushable(neighborTile, direction)){
             Position neighborNeighbor = getNeighborPosition(neighborTile, direction);
@@ -83,8 +89,10 @@ public class Grid implements Cloneable{
                 return MoveResult.BLOCKED;
             boolean neighborWasMoved = moveItem(neighborTile,neighborNeighbor);
             boolean characterWasMoved = moveItem(this.characterPosition, neighborTile);
-            if(neighborWasMoved && characterWasMoved)
+            if(neighborWasMoved && characterWasMoved){
+                this.nbMoves++;
                 return MoveResult.PUSHED;
+            }
         }
         return MoveResult.BLOCKED;
     }

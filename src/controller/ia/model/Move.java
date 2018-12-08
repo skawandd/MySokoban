@@ -30,4 +30,23 @@ public enum Move {
                 return null;
         }
     }
+    
+    /** return teh move associated to the number
+    * @param number
+    * @return 
+    */
+    public static Move getFromNumber(int number){
+        switch(number){
+            case 1:
+                return UP;
+            case 2 :
+                return DOWN;
+            case 3 :
+                return LEFT;
+            case 4 :
+                return RIGHT;
+            default :
+                return null;
+        }
+    }
 }

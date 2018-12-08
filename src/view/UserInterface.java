@@ -3,6 +3,7 @@ package view;
 import java.util.Optional;
 
 import controller.Game;
+import controller.ia.model.Move;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -40,7 +41,7 @@ public class UserInterface extends Application {
 				switch (event.getCode()) {
 
 				case UP:
-					game.move(1);
+					game.move(Move.UP);
 					lastKey = 1;
 					gridPane.getChildren().clear();
 					gridPane.getChildren().add(buildGrid());
@@ -48,21 +49,21 @@ public class UserInterface extends Application {
 
 				case DOWN:
 
-					game.move(2);
+					game.move(Move.DOWN);
 					lastKey = 2;
 					gridPane.getChildren().clear();
 					gridPane.getChildren().add(buildGrid());
 					break;
 
 				case LEFT:
-					game.move(3);
+					game.move(Move.LEFT);
 					lastKey = 3;
 					gridPane.getChildren().clear();
 					gridPane.getChildren().add(buildGrid());
 					break;
 
 				case RIGHT:
-					game.move(4);
+					game.move(Move.RIGHT);
 					lastKey = 4;
 					gridPane.getChildren().clear();
 					gridPane.getChildren().add(buildGrid());
@@ -93,42 +94,33 @@ public class UserInterface extends Application {
 	public GridPane buildGrid() {
 
 		GridPane gridPane = new GridPane();
-		int xLength = game.getBoard().getMatrix()[0].length;
-		int yLength = game.getBoard().getMatrix()[1].length;
+		int xLength = game.getGrid().getX();
+		int yLength = game.getGrid().getY();
 		gridPane.resize(xLength, yLength);
-		Cell[][] tableauCellules = game.getBoard().getMatrix();
+		byte[][] tableauCellules = game.getGrid().getGrid();
 
 		for (int i = 0; i < xLength; i++) {
 			for (int j = 0; j < yLength; j++) {
 
-				// Ajouter le gif correspondant à l'élément sol/floor à la
+				// Ajouter le gif correspondant à l'élément à la
 				// gridPane
-			
-				if (tableauCellules[i][j].isEmpty() && tableauCellules[i][j].getFloor().getId() == 0) {
-					/*
-					 * Image floor = new Image("file:src/ressources/floor.gif");
-					 * ImageView iv0 = new ImageView(floor); //
-					 * gridPane.getChildren().add(iv0);
-					 * System.out.println("wall"); gridPane.add(iv0, j, i);
-					 */
-				}
 				
 				// Element mur id = 1
-				if (tableauCellules[i][j].getElement().getId() == 1) {
+				if (tableauCellules[i][j] == 1) {
 					Image wall = new Image("file:src/ressources/sprites/mur.jpg");
 					ImageView iv1 = new ImageView(wall);
 					gridPane.add(iv1, j, i);
 				}
 
 				// Element caisse id = 2
-				if (tableauCellules[i][j].getElement().getId() == 2) {
+				if (tableauCellules[i][j] == 2) {
 					Image boxOnFloor = new Image("file:src/ressources/sprites/caisse.jpg");
 					ImageView iv2 = new ImageView(boxOnFloor);
 					gridPane.add(iv2, j, i);
 				}
 
 				// Element caisse placée id = 3
-				if (tableauCellules[i][j].getElement().getId() == 3) {
+				if (tableauCellules[i][j] == 3) {
 					Image boxOnGoal = new Image("file:src/ressources/sprites/caisse_ok.jpg");
 					ImageView iv3 = new ImageView(boxOnGoal);
 					gridPane.add(iv3, j, i);
@@ -136,21 +128,21 @@ public class UserInterface extends Application {
 				}
 
 				// Element goal id = 4
-				if (tableauCellules[i][j].isEmpty() && tableauCellules[i][j].getFloor().getId() == 4) {
+				if (tableauCellules[i][j] == 4) {
 					Image goal = new Image("file:src/ressources/sprites/objectif.png");
 					ImageView iv4 = new ImageView(goal);
 					gridPane.add(iv4, j, i);
 				}
 
 				// Element perso id = 5
-				if (tableauCellules[i][j].getElement().getId() == 5) {
+				if (tableauCellules[i][j] == 5) {
 					Image character = getMario(lastKey);
 					ImageView iv5 = new ImageView(character);
 					gridPane.add(iv5, j, i);
 				}
 
 				// Element persoZone id = 6
-				if (tableauCellules[i][j].getElement().getId() == 6) {
+				if (tableauCellules[i][j] == 6) {
 
 					Image characterOnGoal = getMario(lastKey);
 					ImageView iv6 = new ImageView(characterOnGoal);
