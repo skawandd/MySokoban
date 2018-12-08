@@ -1,18 +1,16 @@
 package controller;
 
-import controller.ia.model.Grid;
-import controller.ia.model.Move;
+import modele.Grid;
+import modele.Move;
 import controller.ia.view.Display;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
-import defaultPackage.MainClass;
 
 import view.Menu;
 
 public class Game implements Runnable{
-	private Board board;
         private Grid grid;
 	private int moves;
 	private int lvl = 1; //Init import CSV

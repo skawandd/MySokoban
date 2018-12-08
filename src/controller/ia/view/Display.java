@@ -5,7 +5,7 @@
  */
 package controller.ia.view;
 
-import controller.ia.model.Grid;
+import modele.Grid;
 
 /**
  *

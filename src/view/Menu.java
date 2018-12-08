@@ -1,7 +1,7 @@
 package view;
 
 import controller.Game;
-import controller.ia.model.Grid;
+import modele.Grid;
 
 public class Menu {
 	private Game game;

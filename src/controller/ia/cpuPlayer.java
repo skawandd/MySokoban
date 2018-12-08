@@ -5,9 +5,9 @@
  */
 package controller.ia;
 
-import controller.ia.model.Grid;
-import controller.ia.model.Move;
-import controller.ia.model.MoveResult;
+import modele.Grid;
+import modele.Move;
+import modele.MoveResult;
 import controller.ia.view.Display;
 import java.util.ArrayList;
 import java.util.List;

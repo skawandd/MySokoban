@@ -3,7 +3,7 @@ package view;
 import java.util.Optional;
 
 import controller.Game;
-import controller.ia.model.Move;
+import modele.Move;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -16,17 +16,23 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import modele.Cell;
+import modele.Tile;
 
 public class UserInterface extends Application {
 	private volatile Game game;
-	private int lastKey;
+	private Move lastKey;
+        
+        public UserInterface(){
+            this.lastKey = Move.DOWN;
+        }
 
 	@Override
 	public void start(Stage primaryStage) {
 
 		game = new Game();
 		new Thread(game).start();
+                
+
 		primaryStage.setTitle("MySokoban");
 //		primaryStage.setResizable(false);
 		GridPane gridPane = buildGrid();
@@ -37,41 +43,37 @@ public class UserInterface extends Application {
 
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
-
+                            
 				switch (event.getCode()) {
 
 				case UP:
-					game.move(Move.UP);
-					lastKey = 1;
-					gridPane.getChildren().clear();
-					gridPane.getChildren().add(buildGrid());
-					break;
-
+                                    lastKey = Move.UP;
+                                    game.move(lastKey);
+                                    gridPane.getChildren().clear();
+                                    gridPane.getChildren().add(buildGrid());
+                                    break;
 				case DOWN:
-
-					game.move(Move.DOWN);
-					lastKey = 2;
-					gridPane.getChildren().clear();
-					gridPane.getChildren().add(buildGrid());
-					break;
+                                    lastKey = Move.DOWN;
+                                    game.move(lastKey);
+                                    gridPane.getChildren().clear();
+                                    gridPane.getChildren().add(buildGrid());
+                                    break;
 
 				case LEFT:
-					game.move(Move.LEFT);
-					lastKey = 3;
-					gridPane.getChildren().clear();
-					gridPane.getChildren().add(buildGrid());
-					break;
-
+                                    lastKey = Move.LEFT;
+                                    game.move(lastKey);
+                                    gridPane.getChildren().clear();
+                                    gridPane.getChildren().add(buildGrid());
+                                    break;
 				case RIGHT:
-					game.move(Move.RIGHT);
-					lastKey = 4;
-					gridPane.getChildren().clear();
-					gridPane.getChildren().add(buildGrid());
-					break;
-
+                                    lastKey = Move.RIGHT;
+                                    game.move(lastKey);
+                                    gridPane.getChildren().clear();
+                                    gridPane.getChildren().add(buildGrid());
+                                    break;
 				case ENTER:
 					game = new Game();
-					lastKey = 2;
+					lastKey = Move.DOWN;
 					gridPane.getChildren().clear();
 					gridPane.getChildren().add(buildGrid());
 					break;
@@ -91,6 +93,10 @@ public class UserInterface extends Application {
 		});
 	}
 
+        /**
+         * @brief load all the tiles of the grid
+         * @return 
+         */
 	public GridPane buildGrid() {
 
 		GridPane gridPane = new GridPane();
@@ -98,83 +104,55 @@ public class UserInterface extends Application {
 		int yLength = game.getGrid().getY();
 		gridPane.resize(xLength, yLength);
 		byte[][] tableauCellules = game.getGrid().getGrid();
+                String tilePath;
 
-		for (int i = 0; i < xLength; i++) {
-			for (int j = 0; j < yLength; j++) {
-
-				// Ajouter le gif correspondant à l'élément à la
-				// gridPane
-				
-				// Element mur id = 1
-				if (tableauCellules[i][j] == 1) {
-					Image wall = new Image("file:src/ressources/sprites/mur.jpg");
-					ImageView iv1 = new ImageView(wall);
-					gridPane.add(iv1, j, i);
-				}
-
-				// Element caisse id = 2
-				if (tableauCellules[i][j] == 2) {
-					Image boxOnFloor = new Image("file:src/ressources/sprites/caisse.jpg");
-					ImageView iv2 = new ImageView(boxOnFloor);
-					gridPane.add(iv2, j, i);
-				}
-
-				// Element caisse placée id = 3
-				if (tableauCellules[i][j] == 3) {
-					Image boxOnGoal = new Image("file:src/ressources/sprites/caisse_ok.jpg");
-					ImageView iv3 = new ImageView(boxOnGoal);
-					gridPane.add(iv3, j, i);
-
-				}
-
-				// Element goal id = 4
-				if (tableauCellules[i][j] == 4) {
-					Image goal = new Image("file:src/ressources/sprites/objectif.png");
-					ImageView iv4 = new ImageView(goal);
-					gridPane.add(iv4, j, i);
-				}
-
-				// Element perso id = 5
-				if (tableauCellules[i][j] == 5) {
-					Image character = getMario(lastKey);
-					ImageView iv5 = new ImageView(character);
-					gridPane.add(iv5, j, i);
-				}
-
-				// Element persoZone id = 6
-				if (tableauCellules[i][j] == 6) {
-
-					Image characterOnGoal = getMario(lastKey);
-					ImageView iv6 = new ImageView(characterOnGoal);
-					gridPane.add(iv6, j, i);
-				}
-
+		for (int j = 0; j < yLength; j++){
+                    for (int i = 0; i < xLength; i++) {
+				// Ajouter le gif correspondant à l'élément à la gridPane
+				switch (tableauCellules[i][j]){
+                                        case Tile.MUR:
+                                            tilePath = "file:src/view/sprites/mur.jpg";
+                                            break;
+                                        case Tile.BOX:
+                                            tilePath = "file:src/view/sprites/caisse.jpg";
+                                            break;
+                                        case Tile.BOX_ON_GOAL:
+                                            tilePath = "file:src/view/sprites/caisse_ok.jpg";
+                                            break;
+                                        case Tile.GOAL:
+                                            tilePath = "file:src/view/sprites/objectif.png";
+                                            break;
+                                        case Tile.MARIO:
+                                        case Tile.MARIO_ON_GOAL :
+                                            tilePath = getMario(lastKey);
+                                            break;
+                                        default :
+                                            tilePath = null;
+                                    }
+                                    if(tilePath!=null){
+                                        Image image = new Image(tilePath);
+                                        ImageView iv = new ImageView(image);
+                                        gridPane.add(iv, i, j);
+                                    }
 			}
-
 		}
 		gridPane.setGridLinesVisible(true);
-
 		return gridPane;
 	}
 	
-	private Image getMario(int lastKey) {
-		switch (lastKey) {
-		case 1:
-			return new Image("file:src/ressources/sprites/mario_haut.gif");
-		
-		case 2:
-			return new Image("file:src/ressources/sprites/mario_bas.gif");
-		
-		case 3:
-			return new Image("file:src/ressources/sprites/mario_gauche.gif");
-
-		case 4:
-			return new Image("file:src/ressources/sprites/mario_droite.gif");
-		
-		default:
-			return new Image("file:src/ressources/sprites/mario_bas.gif");
-		}
-	}
+	private String getMario(Move direction) {
+            switch (direction) {
+                case UP:
+                        return "file:src/view/sprites/mario_haut.gif";
+                case DOWN:
+                default :
+                        return "file:src/view/sprites/mario_bas.gif";
+                case LEFT:
+                        return "file:src/view/sprites/mario_gauche.gif";
+                case RIGHT:
+                        return "file:src/view/sprites/mario_droite.gif";
+            }
+        }
 
 	private void showDialog(GridPane gridPane) {
 
@@ -199,7 +177,7 @@ public class UserInterface extends Application {
 			label.setText("No selection!");
 		} else if (option.get() == restart) {
 			game = new Game();
-			lastKey = 2;
+			lastKey = Move.DOWN;
 			gridPane.getChildren().clear();
 			gridPane.getChildren().add(buildGrid());
 		} else if (option.get() == exit) {
