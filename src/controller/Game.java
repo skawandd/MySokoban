@@ -15,11 +15,12 @@ public class Game implements Runnable{
 	private int lvl = 1; //Init import CSV
 	private String playerName;
 	private ZonedDateTime start;
-	private String[] arguments;
+	private String timer;
 	
 	
 	public Game(/*String[] args*/) {
 		this.board = new Board();
+		this.start = ZonedDateTime.now();
 	//	this.arguments = args;
 		
 	}
@@ -78,6 +79,11 @@ public class Game implements Runnable{
 		return buffer;
 	}
 	
+	public void move (int i) {
+		this.board.moveCharacter(i);
+		++moves;
+	}
+	
 	public boolean checkWin() {
 		int i = 0;
 		for (int i1 = 0; i1 < board.getMatrix()[0].length; ++i1) {
@@ -87,6 +93,7 @@ public class Game implements Runnable{
 			}
 		}
 		if(i == board.getGoalNb()) {
+			this.timer = this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS));
 			return true;
 		}
 		
@@ -95,9 +102,9 @@ public class Game implements Runnable{
 	
 	public void Play() {
 		Menu menu = new Menu(this);
-		menu.askPlayerName();
+//		menu.askPlayerName();
 		Scanner sc = new Scanner(System.in);
-		this.playerName = sc.nextLine().toUpperCase();
+//		this.playerName = sc.nextLine().toUpperCase();
 		if(this.playerName.length() > 6)
 			this.playerName = this.playerName.substring(0, 6);
 		this.start = ZonedDateTime.now();
@@ -130,5 +137,10 @@ public class Game implements Runnable{
 		} catch (Exception e) {
 		}
 	}
+
+	public String getTimer() {
+		return timer;
+	}
+
 	
 }
