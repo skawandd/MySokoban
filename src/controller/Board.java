@@ -18,6 +18,7 @@ public class Board {
 	private int characterX, characterY, GoalNb;
         private int boardXSize = 20,
                 boardYSize = 20;
+        private int moves;
         
         public static final class dir {
             public static final int UP = 1;
@@ -31,6 +32,7 @@ public class Board {
             int[][] csv;
             String path = CSVElement.pick_CSVLevel();
             System.out.println(path);
+            moves = 0;
             
             try {
                 csv = CSVElement.readCSVFile(boardXSize, boardYSize, path);
@@ -92,6 +94,10 @@ public class Board {
 	public int getElement(int x, int y){
 		return this.board[y][x].getElement().getId();
 	}
+	
+	public int getMoves() {
+		return this.moves;
+	}
 
 	public void moveCharacter(int i) {
 		switch (i) {
@@ -135,6 +141,7 @@ public class Board {
 
 	private void upCharacter() {
 		if (board[characterY - 1][characterX].isBox() && board[characterY - 2][characterX].isFree()) {
+			++moves;
 			board[characterY - 1][characterX].setElement(new Empty());
 			if(board[characterY - 2][characterX].isGoal())
 				board[characterY - 2][characterX].setElement(new BoxOnGoal());
@@ -142,6 +149,7 @@ public class Board {
 				board[characterY - 2][characterX].setElement(new BoxOnFloor());
 		}
 		if(board[characterY - 1][characterX].isFree()){
+			++moves;
 			board[characterY][characterX].setElement(new Empty());
 			if(board[characterY - 1][characterX].isGoal())
 				board[--characterY][characterX].setElement(new CharacterOnGoal());
@@ -152,6 +160,7 @@ public class Board {
 	
 	private void downCharacter() {
 		if (board[characterY + 1][characterX].isBox() && board[characterY + 2][characterX].isFree()) {
+			++moves;
 			board[characterY + 1][characterX].setElement(new Empty());
 			if(board[characterY + 2][characterX].isGoal())
 				board[characterY + 2][characterX].setElement(new BoxOnGoal());
@@ -159,6 +168,7 @@ public class Board {
 				board[characterY + 2][characterX].setElement(new BoxOnFloor());
 		}
 		if(board[characterY + 1][characterX].isFree()){
+			++moves;
 			board[characterY][characterX].setElement(new Empty());
 			if(board[characterY + 1][characterX].isGoal())
 				board[++characterY][characterX].setElement(new CharacterOnGoal());
@@ -169,6 +179,7 @@ public class Board {
 	
 	private void rightCharacter() {
 		if (board[characterY][characterX + 1].isBox() && board[characterY][characterX + 2].isFree()) {
+			++moves;
 			board[characterY][characterX + 1].setElement(new Empty());
 			if(board[characterY][characterX + 2].isGoal())
 				board[characterY][characterX + 2].setElement(new BoxOnGoal());
@@ -176,6 +187,7 @@ public class Board {
 				board[characterY][characterX + 2].setElement(new BoxOnFloor());
 		}
 		if(board[characterY][characterX + 1].isFree()){
+			++moves;
 			board[characterY][characterX].setElement(new Empty());
 			if(board[characterY][characterX + 1].isGoal())
 				board[characterY][++characterX].setElement(new CharacterOnGoal());
@@ -186,6 +198,7 @@ public class Board {
 	
 	private void leftCharacter() {
 		if (board[characterY][characterX - 1].isBox() && board[characterY][characterX - 2].isFree()) {
+			++moves;
 			board[characterY][characterX - 1].setElement(new Empty());
 			if(board[characterY][characterX - 2].isGoal())
 				board[characterY][characterX - 2].setElement(new BoxOnGoal());
@@ -193,6 +206,7 @@ public class Board {
 				board[characterY][characterX - 2].setElement(new BoxOnFloor());
 		}
 		if(board[characterY][characterX - 1].isFree()){
+			++moves;
 			board[characterY][characterX].setElement(new Empty());
 			if(board[characterY][characterX - 1].isGoal())
 				board[characterY][--characterX].setElement(new CharacterOnGoal());

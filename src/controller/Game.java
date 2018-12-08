@@ -5,9 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 import defaultPackage.MainClass;
-import javafx.application.Application;
 import view.Menu;
-import view.UserInterface;
 
 public class Game implements Runnable{
 	private Board board;
@@ -15,12 +13,13 @@ public class Game implements Runnable{
 	private int lvl = 1; //Init import CSV
 	private String playerName;
 	private ZonedDateTime start;
-	private String timer;
 	
 	
 	public Game(/*String[] args*/) {
 		this.board = new Board();
+		this.playerName = "MARIO";
 		this.start = ZonedDateTime.now();
+		this.moves = 0;
 	//	this.arguments = args;
 		
 	}
@@ -42,11 +41,7 @@ public class Game implements Runnable{
 	}
 
 	public int getMoves() {
-		return moves;
-	}
-
-	public void setMoves(int moves) {
-		this.moves = moves;
+		return this.board.getMoves();
 	}
 	
 	public void askPlayerName() {
@@ -81,7 +76,9 @@ public class Game implements Runnable{
 	
 	public void move (int i) {
 		this.board.moveCharacter(i);
-		++moves;
+		
+		new Menu(this).showInfo(this.getTimer());
+		new Menu(this).showBoard();
 	}
 	
 	public boolean checkWin() {
@@ -93,7 +90,6 @@ public class Game implements Runnable{
 			}
 		}
 		if(i == board.getGoalNb()) {
-			this.timer = this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS));
 			return true;
 		}
 		
@@ -109,9 +105,9 @@ public class Game implements Runnable{
 			this.playerName = this.playerName.substring(0, 6);
 		this.start = ZonedDateTime.now();
 		boolean win = false;
-		moves = 0;
+
 		do {
-			menu.showInfo(this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)));
+			menu.showInfo(this.getTimer());
 			menu.showBoard();
 			if(win = checkWin())
 				break;
@@ -123,7 +119,7 @@ public class Game implements Runnable{
 			} catch (Exception e){
 			}
 		}while(!win);
-		menu.showVictory(playerName, this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS)), moves);
+		menu.showVictory(playerName, this.getTimer(), moves);
 		menu.showRestart();
 		if(sc.nextInt() == 1)
 			MainClass.main(null);
@@ -139,7 +135,7 @@ public class Game implements Runnable{
 	}
 
 	public String getTimer() {
-		return timer;
+		return this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS));
 	}
 
 	
