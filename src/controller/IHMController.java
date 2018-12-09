@@ -35,7 +35,7 @@ public class IHMController extends Application {
     /**
      * On creation character is looking down
      */
-    private IHMController() {
+    public IHMController() {
         this.lastKey = Move.DOWN;
     }
 
