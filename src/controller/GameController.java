@@ -30,9 +30,9 @@ public class GameController /*implements Runnable*/{
 	}
         public void solve() {
 		try {
-			this.cpu = new CPUPlayer(this.grid.clone(), this.eventTarget);
-                        this.solution = this.cpu.getSolution();
-                        this.lvl = this.solution.size();
+                    this.cpu = new CPUPlayer(this.grid.clone());
+                    this.solution = this.cpu.getSolution();
+                    this.lvl = this.solution.size();
 		} catch (Exception e) {
                     System.err.print(e);
 		}

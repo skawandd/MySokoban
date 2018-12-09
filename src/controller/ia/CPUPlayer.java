@@ -10,7 +10,6 @@ import modele.Move;
 import modele.MoveResult;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.event.EventTarget;
 
 /**
  *
@@ -25,7 +24,7 @@ public class CPUPlayer {
     private double elapsedSeconds;
     private List<Move> solution;
 
-    public CPUPlayer(Grid p_grid, EventTarget et){
+    public CPUPlayer(Grid p_grid){
         this.grid = p_grid;
         this.settStart();
         this.solution = generateMove();
