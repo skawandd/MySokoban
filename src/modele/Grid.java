@@ -5,12 +5,8 @@
  */
 package modele;
 
-import controller.ia.view.Display;
 import controller.tools.CSVElement;
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -19,8 +15,8 @@ import java.util.logging.Logger;
 public class Grid implements Cloneable{
     
     private byte[][] grid;
-    private int x_size;
-    private int y_size;
+    private final int x_size;
+    private final int y_size;
     private final int[] pushable = {Tile.BOX,Tile.BOX_ON_GOAL};
     private final int[] crossable ={Tile.SOL,Tile.GOAL};
     private Position characterPosition;
@@ -34,23 +30,13 @@ public class Grid implements Cloneable{
         this.grid = p_Board;
         this.x_size = p_x;
         this.y_size = p_y;
-        // Ensure the Grid is secure
         findCharacterPosition();
     }
-    public Grid(){
-        // CSVElement.readCSVFile(6, 5, path),6,5
-        String path = CSVElement.pick_CSVLevel();
-        try {
-            CSVElement csv = new CSVElement(path);
-            this.grid = csv.getCsvGrid();
-            this.x_size = csv.getNbColumn();
-            this.y_size = csv.getNbLine();
-            findCharacterPosition();
-        } catch (FileNotFoundException ex) {
-            System.err.println("Erreur, impossible de lire le ficher");;
-            this.x_size = 0;
-            this.y_size = 0;
-        }
+    public Grid(CSVElement csv){
+        this.grid = csv.getCsvGrid();
+        this.x_size = csv.getNbColumn();
+        this.y_size = csv.getNbLine();
+        findCharacterPosition();
     }
         
     public int getX() {
@@ -71,7 +57,7 @@ public class Grid implements Cloneable{
     /**
      * @brief Move character in given direction
      * @param direction
-     * @return 
+     * @return MoveResult tells to the calling function what happened
      */
     public MoveResult moveCharacter(Move direction){
         
@@ -112,12 +98,32 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief Grid setter
-     * @param p_grid 
+     * @brief play an array of Move on the board
+     * @param moveSequence 
+     * @return false if a move was not successfull
      */
-    private void setGrid(byte[][] p_grid){
-        this.grid = p_grid;
+    public MoveResult playSequence(List<Move> moveSequence){
+        boolean playedOk;
+        MoveResult previousResult = null, result = MoveResult.BLOCKED;
+        Move previousMove = null;
+        for(Move move : moveSequence){                
+            result = this.moveCharacter(move);
+            
+            //The character CAN NOT go back, EXCEPT if he just pushed a box
+            if((previousMove != null) && (move == previousMove.getOpposite()))
+                if(previousResult != MoveResult.PUSHED)
+                    return MoveResult.BLOCKED;
+            
+            playedOk = ((result == MoveResult.MOVED) || (result == MoveResult.PUSHED));
+            if(!playedOk)
+                return MoveResult.BLOCKED;
+            previousMove = move;
+            previousResult = result;
+        }
+        // We want to know if the player was pushing or moving during the LAST move.
+        return result;
     }
+    
     private void setCharacterPosition(Position characterPosition) {
         this.characterPosition = characterPosition;
     }
@@ -177,33 +183,6 @@ public class Grid implements Cloneable{
                 return new Position(x-1,y);
         }
         return null;
-    }
-    
-    /**
-     * @brief play an array of Move on the board
-     * @param moveSequence 
-     * @return false if a move was not successfull
-     */
-    public MoveResult playSequence(List<Move> moveSequence){
-        boolean playedOk;
-        MoveResult previousResult = null, result = MoveResult.BLOCKED;
-        Move previousMove = null;
-        for(Move move : moveSequence){                
-            result = this.moveCharacter(move);
-            
-            //The character CAN NOT go back, EXCEPT if he just pushed a box
-            if((previousMove != null) && (move == previousMove.getOpposite()))
-                if(previousResult != MoveResult.PUSHED)
-                    return MoveResult.BLOCKED;
-            
-            playedOk = ((result == MoveResult.MOVED) || (result == MoveResult.PUSHED));
-            if(!playedOk)
-                return MoveResult.BLOCKED;
-            previousMove = move;
-            previousResult = result;
-        }
-        // We want to know if the player was pushing or moving during the LAST move.
-        return result;
     }
     
     /**

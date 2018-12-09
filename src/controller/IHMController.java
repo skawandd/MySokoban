@@ -1,8 +1,12 @@
-package view;
+package controller;
 
+import controller.ia.CPUPlayer;
+import controller.tools.CSVElement;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
-import controller.Game;
 import modele.Move;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -13,85 +17,101 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import modele.Tile;
+import view.Menu;
 
-public class UserInterface extends Application {
-	private volatile Game game;
+public class IHMController extends Application {
+	private volatile GameController game;
 	private Move lastKey;
+        CSVElement csv;
         
-        public UserInterface(){
+        public IHMController(){
             this.lastKey = Move.DOWN;
         }
+        
+        public static void main(String[] args) {
+		Application.launch(IHMController.class, args);
+	}
+
 
 	@Override
 	public void start(Stage primaryStage) {
+            initCSV();
+            game = new GameController(csv);
 
-		game = new Game();
-		new Thread(game).start();
-                
+            GridPane gridPane = buildGrid();
+            Scene scene = new Scene(gridPane);
+            
+            primaryStage.setTitle("MySokoban");
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
 
-		primaryStage.setTitle("MySokoban");
-//		primaryStage.setResizable(false);
-		GridPane gridPane = buildGrid();
+            if(!csv.isARobot()){
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
-		Scene scene = new Scene(gridPane);
-		primaryStage.setScene(scene);
-		primaryStage.show();
+                @Override
+                public void handle(KeyEvent event) {
+                    KeyCode key = event.getCode();
+                    switch (key) {
+                    case UP:
+                        lastKey = Move.UP;
+                        break;
+                    case DOWN:
+                        lastKey = Move.DOWN;
+                        break;
+                    case LEFT:
+                        lastKey = Move.LEFT;
+                        break;
+                    case RIGHT:
+                        lastKey = Move.RIGHT;
+                        break;
+                    case ENTER :
+                        break;
+                    case ESCAPE:
+                        System.exit(0);
+                        break;
+                    default:
+                        return;
+                    }
+                    switch(key){
+                        case UP:
+                        case DOWN :
+                        case LEFT :
+                        case RIGHT :
+                            game.move(lastKey);
+                    }
+                    gridPane.getChildren().clear();
+                    gridPane.getChildren().add(buildGrid());
+                    event.consume();
 
-		scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent event) {
-                            
-				switch (event.getCode()) {
-
-				case UP:
-                                    lastKey = Move.UP;
-                                    game.move(lastKey);
-                                    gridPane.getChildren().clear();
-                                    gridPane.getChildren().add(buildGrid());
-                                    break;
-				case DOWN:
-                                    lastKey = Move.DOWN;
-                                    game.move(lastKey);
-                                    gridPane.getChildren().clear();
-                                    gridPane.getChildren().add(buildGrid());
-                                    break;
-
-				case LEFT:
-                                    lastKey = Move.LEFT;
-                                    game.move(lastKey);
-                                    gridPane.getChildren().clear();
-                                    gridPane.getChildren().add(buildGrid());
-                                    break;
-				case RIGHT:
-                                    lastKey = Move.RIGHT;
-                                    game.move(lastKey);
-                                    gridPane.getChildren().clear();
-                                    gridPane.getChildren().add(buildGrid());
-                                    break;
-				case ENTER:
-					game = new Game();
-					lastKey = Move.DOWN;
-					gridPane.getChildren().clear();
-					gridPane.getChildren().add(buildGrid());
-					break;
-
-				case ESCAPE:
-					System.exit(0);
-					break;
-				default:
-					break;
-				}
-				event.consume();
-
-				if (game.checkWin()) {
-					showDialog(gridPane);
-				}
-			}
-		});
+                    if (game.checkWin()) {
+                            showDialog(gridPane);
+                    }
+                }
+            });
+            }else{
+                play(gridPane);
+            }
+            
 	}
+        private void play(GridPane gridPane){
+            game.solve();
+            List<Move> solution = game.getSolution();
+            if(solution != null){
+                for(Move move : solution){
+                    game.move(move);
+                    gridPane.getChildren().clear();
+                    gridPane.getChildren().add(buildGrid());
+                }
+            }
+            System.out.println(game.getLvl() + " coups");
+            System.out.println(Menu.printSequence(solution));
+        }
 
         /**
          * @brief load all the tiles of the grid
@@ -174,15 +194,33 @@ public class UserInterface extends Application {
 		Label label = new Label();
 
 		if (option.get() == null) {
-			label.setText("No selection!");
+                    label.setText("No selection!");
 		} else if (option.get() == restart) {
-			game = new Game();
-			lastKey = Move.DOWN;
-			gridPane.getChildren().clear();
-			gridPane.getChildren().add(buildGrid());
+                    //TODO relaucn real game, resize window
+                    initCSV();
+                    game = new GameController(csv);
+                    lastKey = Move.DOWN;
+                    gridPane.getChildren().clear();
+                    gridPane.getChildren().add(buildGrid());
 		} else if (option.get() == exit) {
 			System.exit(0);
 		}
 	}
+        
+        /**
+         * @brief init the CSV Grid that will be used by both IA and Human
+         */
+        private void initCSV(){
+            boolean notInstanciated = true;
+            do{
+                File file = CSVElement.pick_CSVLevel();
+                try {
+                    this.csv = new CSVElement(file);
+                    notInstanciated = false;
+                } catch (FileNotFoundException ex) {
+                    System.err.println("Unable to read specified file");
+                }
+            }while(notInstanciated);
+        }
 
 }

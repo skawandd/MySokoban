@@ -1,12 +1,14 @@
 package view;
 
-import controller.Game;
+import controller.GameController;
+import java.util.List;
 import modele.Grid;
+import modele.Move;
 
 public class Menu {
-	private Game game;
+	private GameController game;
 	
-	public Menu(Game game) {
+	public Menu(GameController game) {
 		this.game = game;
 	}
 	
@@ -30,28 +32,7 @@ public class Menu {
 	public void showRestart() {
 		System.out.println("Restart?\n1.Yes 2.No\n");
 	}
-	
-        /*
-	public void showBoard() {
-		System.out.println("=======================================");
-		for (int i1 = 0; i1 < game.getBoard().getMatrix()[0].length; ++i1) {
-			String out = "";
-			for (int i2 = 0; i2 < game.getBoard().getMatrix()[1].length; ++i2) {
-				if(game.getBoard().getMatrix()[i1][i2].isEmpty()) {
-					if(game.getBoard().getMatrix()[i1][i2].isGoal())
-						out += game.getBoard().getMatrix()[i1][i2].getFloor().getId() + " ";
-					else
-						out += ". ";
-				}
-				else
-					out += game.getBoard().getMatrix()[i1][i2].getElement().getId() + " ";
-			}
-			System.out.println(out);
-
-		}
-		System.out.println("=======================================");
-	}*/
-        
+	       
         /**
          * 
          * @param grid 
@@ -86,5 +67,21 @@ public class Menu {
                 System.out.println();
             }
         }
+        
+            /**
+     * Returns the list of move as a String
+     * @param moveSequence 
+     * @return  String
+     */
+    public static String printSequence(List<Move> moveSequence){
+        String sequence = new String();
+        if(moveSequence.size()>0){
+            for(Move move : moveSequence){
+                sequence+= move;
+                sequence+=" ";
+            }
+        }
+        return sequence;
+    }
 	
 }

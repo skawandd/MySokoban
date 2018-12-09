@@ -8,56 +8,66 @@ package controller.ia;
 import modele.Grid;
 import modele.Move;
 import modele.MoveResult;
-import controller.ia.view.Display;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.event.EventTarget;
 
 /**
  *
  * @author Francois
  */
-public class cpuPlayer {
+public class CPUPlayer {
     
-    private Grid board;
-    
-    cpuPlayer(){
-        this.board = new Grid();
+    private Grid grid;
+    private long tStart;
+    private long tEnd;
+    private long tDelta;
+    private double elapsedSeconds;
+    private List<Move> solution;
+
+    public CPUPlayer(Grid p_grid, EventTarget et){
+        this.grid = p_grid;
+        this.settStart();
+        this.solution = generateMove();
+        this.settEnd();
+        this.settDelta();
+    }
+
+    public List<Move> getSolution() {
+        return solution;
+    }
+
+    public long gettStart() {
+        return tStart;
+    }
+    public long gettEnd() {
+        return tEnd;
+    }
+    public long gettDelta() {
+        return tDelta;
     }
     
-    public static void main(String[] args){
-        
-        cpuPlayer cpu = new cpuPlayer();        
-
-
-        long tStart = System.currentTimeMillis();        
-        List<Move> answer = cpu.generateMove();
-        long tEnd = System.currentTimeMillis();
-        long tDelta = tEnd - tStart;
-        double elapsedSeconds = tDelta / 1000.0;
-        System.out.println("This took : "+tDelta+" milliseconds or "+elapsedSeconds+" seconds");
-       
-
-        Display.printBoard(cpu.getBoard());
-        if(answer != null){
-            System.out.println("Success !");
-            cpu.printSequence(answer);
-        }
-        cpu.getBoard().playSequence(answer);
-        Display.printBoard(cpu.getBoard());
-        
+    private void settStart() {
+        this.tStart = System.currentTimeMillis();
     }
-        
+    private void settEnd() {
+        this.tEnd = System.currentTimeMillis();
+    }
+    private void settDelta() {
+        this.tDelta = this.tEnd - this.tStart;
+        this.elapsedSeconds = this.tDelta / 1000.0;
+    }
+    
     private List<Move> generateMove(){
         List<List<Move>> theList = new ArrayList<>();
         
         Grid testBoard;
-        Grid motherBoard = this.getBoard();
+        Grid motherBoard = this.grid;
         boolean isSequenceOk;
         // The code for first initialisation is duplicated
         // We don't want to make this each time in genMove
         for(Move moveToTry : Move.values()){
             testBoard = motherBoard.clone();
-            //System.out.println(moveToTry);
 
             MoveResult result = testBoard.moveCharacter(moveToTry);
             isSequenceOk = (!(result == MoveResult.BLOCKED));
@@ -67,7 +77,6 @@ public class cpuPlayer {
                 listToAdd.add(moveToTry);
                 theList.add(listToAdd);
             }
-            //Display.printBoard(testBoard);
         }
         if(theList.isEmpty()){
             System.err.println("Unable to make first Move, cherck the grid");
@@ -84,7 +93,6 @@ public class cpuPlayer {
      */
     private List<Move> generateMoveN1( List<List<Move>> previousMovesList, int level){
         level++;
-        System.out.println("Level :" + level);
         List<List<Move>> okMoveSequenceList = new ArrayList<>();
         List<Move> testList ;
         Grid testBoard;
@@ -94,7 +102,7 @@ public class cpuPlayer {
             
             boolean atLeastOneMovePossible = false;
             for(Move move : Move.values()){
-                testBoard = this.getBoard().clone();
+                testBoard = this.grid.clone();
                 testList = copyMoveList(moveList);
                 testList.add(move);
                 result = testBoard.playSequence(testList);
@@ -102,14 +110,12 @@ public class cpuPlayer {
                 
                 if(isSequenceOk){
                     atLeastOneMovePossible = true;
-                    //printSequence(testList);
                     if(testBoard.hasWon())
                         return testList;
                     else
                         okMoveSequenceList.add(testList);
                 }
             }
-            //if(atLeastOneMovePossible) maybe useless
         }
         List<Move> answer = generateMoveN1(okMoveSequenceList, level);
         return answer;
@@ -125,23 +131,4 @@ public class cpuPlayer {
         return copyList;
     }
 
-    /**
-     * Print an array of moves on the screen
-     * @param moveSequence 
-     */
-    private void printSequence(List<Move> moveSequence){
-        /*for(int i = moveSequence.length-1;i>=0;i--){
-        System.out.println(moveSequence[i]);
-        }*/
-        if(moveSequence.size()>0){
-            moveSequence.forEach((move) -> {
-                System.out.print(move+" ");
-            });
-            System.out.println();
-        }
-    }
-       
-    public Grid getBoard() {
-        return this.board;
-    }
 }

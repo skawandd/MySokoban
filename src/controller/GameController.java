@@ -1,30 +1,43 @@
 package controller;
 
+import controller.ia.CPUPlayer;
+import controller.tools.CSVElement;
 import modele.Grid;
 import modele.Move;
-import controller.ia.view.Display;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Scanner;
+import javafx.event.EventTarget;
 
-
-import view.Menu;
-
-public class Game implements Runnable{
+public class GameController /*implements Runnable*/{
         private Grid grid;
-	private int moves;
 	private int lvl = 1; //Init import CSV
 	private String playerName;
 	private ZonedDateTime start;
-	
-	
-	public Game(/*String[] args*/) {
-            this.grid = new Grid();
+        private CPUPlayer cpu;
+        private EventTarget eventTarget;
+        private List<Move> solution;
+
+    public List<Move> getSolution() {
+        return solution;
+    }
+        
+	public GameController(CSVElement csv) {
+            this.grid = new Grid(csv);
             this.playerName = "MARIO";
             this.start = ZonedDateTime.now();
-            this.moves = 0;		
 	}
-
+        public void solve() {
+		try {
+			this.cpu = new CPUPlayer(this.grid.clone(), this.eventTarget);
+                        this.solution = this.cpu.getSolution();
+                        this.lvl = this.solution.size();
+		} catch (Exception e) {
+                    System.err.print(e);
+		}
+        }
+        
         public Grid getGrid() {
             return grid;
         }
@@ -32,14 +45,6 @@ public class Game implements Runnable{
         public void setGrid(Grid grid) {
             this.grid = grid;
         }
-        /*
-	public Board getBoard() {
-		return board;
-	}
-
-	public void setBoard(Board board) {
-		this.board = board;
-	}*/
 	
 	public int getLvl() {
 		return lvl;
@@ -84,18 +89,14 @@ public class Game implements Runnable{
 	}
 	
 	public void move (Move move) {
-		/*this.board.moveCharacter(i);*/
 		this.grid.moveCharacter(move);
-                // TODO RAF ici
-		new Menu(this).showInfo(this.getTimer());
-		Menu.printBoard(grid);
 	}
 	
 	public boolean checkWin() {		
 		return grid.hasWon();
 	}
 	
-	public void Play() {
+	/*public void Play() {
 		Menu menu = new Menu(this);
 		Scanner sc = new Scanner(System.in);
 		if(this.playerName.length() > 6)
@@ -107,7 +108,7 @@ public class Game implements Runnable{
                     int answer;
                     menu.showInfo(this.getTimer());
                     //menu.showBoard();
-                    Display.printBoard(grid);
+                    Menu.printBoard(grid);
                     if(win = grid.hasWon())
                             break;
                     ++moves;
@@ -121,7 +122,7 @@ public class Game implements Runnable{
 		menu.showVictory(playerName, this.getTimer(), moves);
 		menu.showRestart();
 		if(sc.nextInt() == 1)
-			MainClass.main(null);
+			IHMController.main(null);
 		sc.close();
 	}
         
@@ -132,7 +133,7 @@ public class Game implements Runnable{
             } else{
                 switch (command){
                     case 5 :
-                        MainClass.main(null);
+                        IHMController.main(null);
                         break;
                     case 6 :
                         System.exit(0);
@@ -140,19 +141,52 @@ public class Game implements Runnable{
             }
         }
         
-
+        public void setEventTarget(EventTarget p_et){
+            this.eventTarget = p_et;
+        }
+        
+        @Override
 	public void run() {
 		try {
-			System.out.println("Thread");
-			this.Play();
+			this.cpu = new CPUPlayer(this.grid.clone(), this.eventTarget);
+                        this.solution = this.cpu.getSolution();
+                        this.play();
 		} catch (Exception e) {
                     System.err.print(e);
 		}
 	}
 
+        public void play(){
+            this.solve();
+            if(this.solution != null){
+                KeyCode keyCode;
+                KeyEvent keyEvent;
+                for(Move move : this.solution){
+                    wait(2000);
+                    switch(move){
+                        case UP:
+                            keyCode = KeyCode.UP;;
+                            break;
+                        case DOWN:
+                            keyCode = KeyCode.DOWN;
+                            break;
+                        case LEFT:
+                            keyCode = KeyCode.LEFT;
+                            break;
+                        case RIGHT:
+                            keyCode = KeyCode.RIGHT;
+                            break;
+                        default: 
+                            keyCode = null;
+                    }
+                    keyEvent = new KeyEvent(KeyEvent.KEY_PRESSED, move.toString(), "", keyCode, false, false, false, false);
+                    KeyEvent.fireEvent(this.eventTarget, keyEvent);
+                }
+            }
+        }*/
+
 	public String getTimer() {
 		return this.getStopWatch((int)start.until(ZonedDateTime.now(), ChronoUnit.SECONDS));
 	}
-
 	
 }

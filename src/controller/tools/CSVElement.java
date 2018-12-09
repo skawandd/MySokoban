@@ -23,17 +23,28 @@ public class CSVElement {
     private int nbLine;
     private int nbColumn;
     byte[][] csvGrid;
+    private File csv;
+    
+    /**
+     * @brief Ask the user to pick the level CSV file
+     * @author Francois
+     * @return String Absolute path to the CSV file. Return Empty string if path is not valid
+     */
+    public static File pick_CSVLevel(){
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
+        JFileChooser chooser = new JFileChooser("./src/view/levels");
+        chooser.setFileFilter(filter);
 
-    public final void setNbLine(int nbLine) {
-        this.nbLine = nbLine;
+        int returnVal = chooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            return chooser.getSelectedFile();
+        }
+        return null;
     }
-
-    public final void setNbColumn(int nbColumn) {
-        this.nbColumn = nbColumn;
-    }
-
-    public void setCsvGrid(byte[][] csvGrid) {
-        this.csvGrid = csvGrid;
+    
+    public boolean isARobot(){
+        String name = this.csv.getName();
+        return name.startsWith("ia_level");
     }
 
     public final int getNbLine() {
@@ -47,73 +58,53 @@ public class CSVElement {
     public byte[][] getCsvGrid() {
         return csvGrid;
     }
-    
-    /**
-     * @brief This function create a char array from a CSV file.
-     * Size of the array must be specified
-     * @throws FileNotFoundException
-     * @param p_nbColumn : Column number (X)
-     * @param p_nbLine : Line number (Y)
-     * @param p_path : path to the level csv file
-     * @return the CSV file as a {@code int[][]}
-     */    
-    public static byte[][] readCSVFile(int p_nbColumn, int p_nbLine, String p_path) throws FileNotFoundException{
-        CSVElement csv = new CSVElement(p_path);
-        return csv.getCsvGrid();
-    }
-    
+        
     /**
      * @brief CSVElement constructor from a CSV file.
      * Size of the array must be specified
+     * @param p_csv
      * @throws FileNotFoundException
-     * @param p_path : path to the level csv file
      */
-    public CSVElement(String p_path) throws FileNotFoundException{
+    public CSVElement(File p_csv) throws FileNotFoundException{
         
-        File myCSV = new File(p_path);
+        this.csv = p_csv;
         BufferedReader br;
         
-        if(!initXandY(myCSV))
+        if(!initXandY())
                 return;
         
-        try {
-           // Get x and y size of the CSV
-                        
-            br = new BufferedReader(new FileReader(myCSV));
-            this.csvGrid = new byte[nbColumn][nbLine];
-            
-            for (int line = 0; line < nbLine ; line++){
-                for (int column = 0; column < nbColumn; column++){
-                    char f_character;
+        br = new BufferedReader(new FileReader(csv));
+        this.csvGrid = new byte[nbColumn][nbLine];
 
-                    try {
-                        //If it's CR/LF or ',' from CSV, take the next one
-                        do{
-                            f_character = (char)br.read();
-                        }while(f_character == (char)'\n' || f_character == ',' || f_character == '\r' );
-                        // We need both '\n' and '\r' for Windows systems
-                        
-                        this.csvGrid[column][line] = (byte)Character.getNumericValue(f_character);
-                    } catch (IOException ex) {
-                        System.err.println(ex.toString());
-                    }
+        for (int line = 0; line < nbLine ; line++){
+            for (int column = 0; column < nbColumn; column++){
+                char f_character;
+
+                try {
+                    //If it's CR/LF or ',' from CSV, take the next one
+                    do{
+                        f_character = (char)br.read();
+                    }while(f_character == (char)'\n' || f_character == ',' || f_character == '\r' );
+                    // We need both '\n' and '\r' for Windows systems
+
+                    this.csvGrid[column][line] = (byte)Character.getNumericValue(f_character);
+                } catch (IOException ex) {
+                    System.err.println(ex.toString());
                 }
             }
-        } catch (FileNotFoundException ex) {
-                        System.err.println(ex.toString());
         }
     }
     
-    private boolean initXandY(File myCSV){
+    private boolean initXandY() throws FileNotFoundException{
         
         BufferedReader br;
         
+        br = new BufferedReader(new FileReader(csv));
+        byte csvSizeX = 0;
+        byte csvSizeY = -1;
+        char f_character;
+        boolean isEndOfLine;
         try {
-            br = new BufferedReader(new FileReader(myCSV));
-            byte csvSizeX = 0;
-            byte csvSizeY = -1;
-            char f_character;
-            boolean isEndOfLine;
             //If it's CR/LF or ',' from CSV, take the next one
             do{
                 f_character = (char)br.read();
@@ -125,15 +116,15 @@ public class CSVElement {
 
             if(csvSizeX>0){
                 // Find Y;
-                br = new BufferedReader(new FileReader(myCSV));
+                br = new BufferedReader(new FileReader(csv));
                 String line;
                 do{
                     line = br.readLine();
                     csvSizeY++;
                 }while(line != null);
             } else return false;
-            this.setNbColumn(csvSizeX);
-            this.setNbLine(csvSizeY);
+            this.nbColumn = csvSizeX;
+            this.nbLine = csvSizeY;
 
             return true;
         } catch (IOException ex) {
@@ -141,45 +132,5 @@ public class CSVElement {
             return false;
         }
         
-    }
-    
-    /**
-     * @brief Ask the user to pick the level CSV file
-     * @author Francois
-     * @return String Absolute path to the CSV file. Return Empty string if path is not valid
-     */
-    public static String pick_CSVLevel(){
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
-        JFileChooser chooser = new JFileChooser("./src/view/levels");
-        chooser.setFileFilter(filter);
-
-        int returnVal = chooser.showOpenDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            return chooser.getSelectedFile().getAbsolutePath();
-        }
-
-        return "";
-    }
-    
-    // TEST ONLY
-        /*
-    public static void main (String[] args) throws IOException{
-    String path_Mac = "/Users/benjamin/Dropbox/0-ECE/JAVA_POO/Projet_Sokoban/MySokoban/src/view/niveau_1.csv";
-        
-        int[][] laVar = readCSVFile(20,20, path_Mac);
-        
-        for (int line = 0; line < 20 ; line++){
-            for (int column = 0; column < 20; column++){
-                System.out.print(laVar[line][column]+" ");
-            }
-            System.out.println("");
-        }
-        
-        //COLORS
-        //https://stackoverflow.com/questions/28405833/change-color-of-output-text-in-netbeans-ide-window-and-clear-the-output-area
-        String ANSI_RESET = "\u001B[0m";
-        String ANSI_RED = "\u001B[31m";
-        System.out.println(ANSI_RED + "This text is red!" + ANSI_RESET + " texte noir");
-    }*/
-        
+    }     
 }
