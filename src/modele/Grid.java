@@ -55,8 +55,8 @@ public class Grid implements Cloneable{
         return (this.getEmptyGoalsLeft() == 0);
     }
     /**
-     * @brief Move character in given direction
-     * @param direction
+     * Move character in given direction
+     * @param direction Direction the caracter is taking
      * @return MoveResult tells to the calling function what happened
      */
     public MoveResult moveCharacter(Move direction){
@@ -84,8 +84,8 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief returns a brand new Grid with its own byte Array
-     * @return Grid
+     * Returns a brand new Grid with its own byte Array
+     * @return Grid the Clone of This grid
      */
     @Override
     public Grid clone(){
@@ -98,8 +98,8 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief play an array of Move on the board
-     * @param moveSequence 
+     * Plays an array of Move on the board
+     * @param moveSequence Move sequence to play
      * @return false if a move was not successfull
      */
     public MoveResult playSequence(List<Move> moveSequence){

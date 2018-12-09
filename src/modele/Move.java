@@ -31,9 +31,9 @@ public enum Move {
         }
     }
     
-    /** return teh move associated to the number
-    * @param number
-    * @return 
+    /** return the move associated to the number
+    * @param number the number you want the associated moev
+    * @return the move associated to the number
     */
     public static Move getFromNumber(int number){
         switch(number){

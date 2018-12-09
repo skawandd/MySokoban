@@ -26,7 +26,7 @@ public class CSVElement {
     private File csv;
     
     /**
-     * @brief Ask the user to pick the level CSV file
+     * Ask the user to pick the level CSV file
      * @author Francois
      * @return String Absolute path to the CSV file. Return Empty string if path is not valid
      */
@@ -60,10 +60,10 @@ public class CSVElement {
     }
         
     /**
-     * @brief CSVElement constructor from a CSV file.
+     * CSVElement constructor from a CSV file.
      * Size of the array must be specified
-     * @param p_csv
-     * @throws FileNotFoundException
+     * @param p_csv the CSV File object
+     * @throws FileNotFoundException The calling class has to handle the error
      */
     public CSVElement(File p_csv) throws FileNotFoundException{
         
