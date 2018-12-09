@@ -10,10 +10,14 @@ import java.util.Scanner;
 import modele.Move;
 import view.Display;
 
-public class PlayerGameController extends GameController {
+public class PlayerGameController extends GameController implements Runnable{
 
     private String playerName;
 
+    /**
+     * GameController creation with default name
+     * @param csv The CSV element needed by parent
+     */
     public PlayerGameController(CSVElement csv) {
         super(csv);
         this.playerName = "MARIO";
@@ -26,6 +30,9 @@ public class PlayerGameController extends GameController {
         this.setNbMoves(this.getNbMoves()+1);
     }
     
+    /**
+     * Display console menu
+     */
     public void Play() {
         Display menu = new Display(this);
         Scanner sc = new Scanner(System.in);
@@ -58,6 +65,10 @@ public class PlayerGameController extends GameController {
         sc.close();
     }
 
+    /**
+     * Command number interpretation
+     * @param command Command number
+     */
     private void execCommand(int command) {
         if (command > 0 && command <= 4) {
             Move move = Move.getFromNumber(command);
@@ -94,5 +105,17 @@ public class PlayerGameController extends GameController {
      */
     protected void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    /**
+     * Display console
+     */
+    @Override
+    public void run() {
+		try {
+			this.Play();
+		} catch (Exception e) {
+                    System.err.println(e);
+                }
     }
 }

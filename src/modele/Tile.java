@@ -6,8 +6,7 @@
 package modele;
 
 /**
- *
- * @author Francois
+ * Describe the elements present on a Grid
  */
 public class Tile {
     public static final int SOL = 0;

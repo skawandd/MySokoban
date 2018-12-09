@@ -10,12 +10,18 @@ import controller.tools.CSVElement;
 import java.util.List;
 import modele.Move;
 
-
+/**
+ * RobotGameController is made to resolve grid 
+ */
 public class RobotGameController extends GameController {
 
     private CPUPlayer cpu;
     private List<Move> solution;
     
+    /**
+     * Instanciation is made like parent
+     * @param csv The CSV Object needed
+     */
     public RobotGameController(CSVElement csv) {
         super(csv);
     }
@@ -28,7 +34,7 @@ public class RobotGameController extends GameController {
     }
     
     /**
-     * 
+     * Solve the Grid. Time consuming task, do not use on large Grids
      */
     public void solve() {
         try {

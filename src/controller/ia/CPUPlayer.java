@@ -24,6 +24,10 @@ public class CPUPlayer {
     private double elapsedSeconds;
     private List<Move> solution;
 
+    /**
+     * CPUPlayer creation
+     * @param p_grid The grid to resolve
+     */
     public CPUPlayer(Grid p_grid){
         this.grid = p_grid;
         this.settStart();
@@ -32,31 +36,54 @@ public class CPUPlayer {
         this.settDelta();
     }
 
+    /**
+     * @return Solution List of Move
+     */
     public List<Move> getSolution() {
         return solution;
     }
 
+    /**
+     * @return startTime
+     */
     public long gettStart() {
         return tStart;
     }
+    /**
+     * @return EndTime
+     */
     public long gettEnd() {
         return tEnd;
     }
+    /**
+     * @return Resolution duration
+     */
     public long gettDelta() {
         return tDelta;
     }
-    
+    /**
+     * Timer init
+     */
     private void settStart() {
         this.tStart = System.currentTimeMillis();
     }
+    /**
+     * stop timer
+     */
     private void settEnd() {
         this.tEnd = System.currentTimeMillis();
     }
+    /**
+     * compute duration
+     */
     private void settDelta() {
         this.tDelta = this.tEnd - this.tStart;
         this.elapsedSeconds = this.tDelta / 1000.0;
     }
-    
+    /**
+     * Recursive method exploring all possible moves
+     * @return the move sequence that solve the Grid
+     */
     private List<Move> generateMove(){
         List<List<Move>> theList = new ArrayList<>();
         
@@ -88,7 +115,7 @@ public class CPUPlayer {
     /**
      * @Brief called recursively. It takes into account the previous moves to explore new ones
      * @param previousMovesList 
-     * @return 
+     * @return the sequence of move once it has been found
      */
     private List<Move> generateMoveN1( List<List<Move>> previousMovesList, int level){
         level++;
@@ -120,6 +147,11 @@ public class CPUPlayer {
         return answer;
     }
     
+    /**
+     * List duplication
+     * @param originalList
+     * @return the brand new created List
+     */
     private List<Move> copyMoveList(List<Move> originalList){
         List<Move> copyList = new ArrayList<>();
         

@@ -6,8 +6,7 @@
 package modele;
 
 /**
- *
- * @author Francois
+ * Possible results after Move
  */
 public enum MoveResult {
     BLOCKED,

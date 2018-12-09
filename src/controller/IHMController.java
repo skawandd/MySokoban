@@ -58,6 +58,9 @@ public class IHMController extends Application {
 
         if (!csv.isARobot()) {
             game = new PlayerGameController(csv);
+            Thread consoleThread = new Thread((PlayerGameController)game);
+            consoleThread.start();
+            
             GridPane gridPane = buildGrid();
             scene = new Scene(gridPane);
             scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {

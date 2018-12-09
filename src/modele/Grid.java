@@ -9,8 +9,7 @@ import controller.tools.CSVElement;
 import java.util.List;
 
 /**
- *
- * @author Francois
+ * Grid element represent de labyrinth
  */
 public class Grid implements Cloneable{
     
@@ -22,16 +21,28 @@ public class Grid implements Cloneable{
     private Position characterPosition;
     private int nbMoves;
 
+    /**
+     * @return Moves played since the Grid has been loaded
+     */
     public int getNbMoves() {
         return nbMoves;
     }
-    
+    /**
+     * Create grid from scratch.
+     * @param p_Board The array containing the infos
+     * @param p_x number of columns
+     * @param p_y number of lines
+     */
     public Grid(byte[][] p_Board, int p_x, int p_y){
         this.grid = p_Board;
         this.x_size = p_x;
         this.y_size = p_y;
         findCharacterPosition();
     }
+    /**
+     * Create Grid from CSV
+     * @param csv the source CSV
+     */
     public Grid(CSVElement csv){
         this.grid = csv.getCsvGrid();
         this.x_size = csv.getNbColumn();
@@ -39,18 +50,34 @@ public class Grid implements Cloneable{
         findCharacterPosition();
     }
         
+    /**
+     * @return X dimension
+     */
     public int getX() {
         return x_size;
     }
+    /**
+     * @return Y dimension
+     */
     public int getY() {
         return y_size;
     }
+    /**
+     * @return character position
+     */
     public Position getCharacterPosition() {
         return characterPosition;
     }
+    /**
+     * @return the byte array Grid
+     */
     public byte[][] getGrid() {
         return this.grid;
     }
+    /**
+     * Grid is won if there is no emptygoal left
+     * @return true if the Grid is won
+     */
     public boolean hasWon(){
         return (this.getEmptyGoalsLeft() == 0);
     }
@@ -123,19 +150,31 @@ public class Grid implements Cloneable{
         // We want to know if the player was pushing or moving during the LAST move.
         return result;
     }
-    
+    /**
+     * Sets new character position
+     * @param characterPosition New position
+     */
     private void setCharacterPosition(Position characterPosition) {
         this.characterPosition = characterPosition;
     }
-    
+    /**
+     * @param p_position The position inside which you whant to know what there is
+     * @return The value/item at this position
+     */
     private byte getItem(Position p_position){
         return this.grid[p_position.getX()][p_position.getY()];
     }
-    
+    /**
+     * Define what value has a certain position
+     * @param position Target position
+     * @param item Target position new value
+     */
     private void setItem(Position position, byte item){
         this.grid[position.getX()][position.getY()] = item;
     }
-    
+    /**
+     * Find character on map. 
+     */
     private void findCharacterPosition(){
         for(int var_y=0; var_y < this.y_size; var_y++){
             for(int var_x = 0; var_x < this.x_size; var_x++){
@@ -148,7 +187,9 @@ public class Grid implements Cloneable{
         }
         System.err.println("Error : No character found on grid");
     }
-    
+    /**
+     * @return Number of empty goals
+     */
     private int getEmptyGoalsLeft(){
         int nbEmptyGoals = 0;
         for(int var_y=0; var_y < this.y_size; var_y++){
@@ -163,7 +204,7 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief Gives you a tile's neighbor. 
+     * Gives you a tile's neighbor. 
      * @param p_pos the position you want to get the neighboor of
      * @param direction the direction of the neighbor
      * @return Position or null if not found
@@ -186,7 +227,7 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief Moves Mario or a box on the grid
+     * Moves Mario or a box on the grid
      * @param originTilePosition
      * @param targetTilePosition 
      * @return false if move was not possible
@@ -252,7 +293,7 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief Tells you if a Tile is crossable
+     * Tells you if a Tile is crossable
      * @param tile
      * @return boolean 
      */
@@ -268,7 +309,7 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief tells if an object is pushable in the given direction
+     * tells if an object is pushable in the given direction
      * @param tile
      * @param direction
      * @return true if the object can be pushed in the given direction
@@ -287,7 +328,7 @@ public class Grid implements Cloneable{
     }
     
     /**
-     * @brief Copies originalArray and return a brand new copy.
+     * Copies originalArray and return a brand new copy.
      * @param originalArray
      * @return byte[][] the copy
      */

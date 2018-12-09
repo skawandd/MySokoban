@@ -15,6 +15,9 @@ public enum Move {
     DOWN,
     LEFT;
     
+    /**
+     * @return the Opposite Movement
+     */
     public Move getOpposite(){
         
         switch(this){

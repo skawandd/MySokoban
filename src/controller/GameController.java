@@ -41,13 +41,11 @@ public abstract class GameController {
     }
     
     /**
-     * @
+     * @param p_nb Number of moves
      */
     protected void setNbMoves(int p_nb){
         this.nbMoves = p_nb;
     }
-
-
 
     /**
      * Moves the character in the given direction

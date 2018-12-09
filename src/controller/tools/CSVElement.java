@@ -41,20 +41,32 @@ public class CSVElement {
         }
         return null;
     }
-    
+    /**
+     * If the file name starts with "ia_level" then it should not be played by human
+     * @return true if the file has to be played by computer
+     */
     public boolean isARobot(){
         String name = this.csv.getName();
         return name.startsWith("ia_level");
     }
 
+    /**
+     * @return Y dimension of CSV
+     */
     public final int getNbLine() {
         return nbLine;
     }
 
+    /**
+     * @return X dimension of CSV
+     */
     public final int getNbColumn() {
         return nbColumn;
     }
 
+    /**
+     * @return The grid in itself
+     */
     public byte[][] getCsvGrid() {
         return csvGrid;
     }
@@ -95,6 +107,12 @@ public class CSVElement {
         }
     }
     
+    /**
+     * Finds the dimensions of the CSV file, 
+     * based on CR/LF caracters.
+     * @return true if X and Y have been found
+     * @throws FileNotFoundException 
+     */
     private boolean initXandY() throws FileNotFoundException{
         
         BufferedReader br;
