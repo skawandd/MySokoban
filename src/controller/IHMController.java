@@ -31,6 +31,19 @@ public class IHMController extends Application {
     private volatile GameController game;
     private Move lastKey;
     CSVElement csv;
+    
+    private final String sprites_path = "file:src/view/sprites/";
+//    private final String sprites_path = "file:sprites/";
+    
+    private final String mur = sprites_path + "mur.jpg";
+    private final String caisse = sprites_path + "caisse.jpg";
+    private final String caisse_ok = sprites_path + "caisse_ok.jpg";
+    private final String objectif = sprites_path + "objectif.png";
+    
+    private final String mario_haut = sprites_path + "mario_haut.gif";
+    private final String mario_bas = sprites_path + "mario_bas.gif";
+    private final String mario_gauche = sprites_path + "mario_gauche.gif";
+    private final String mario_droite = sprites_path + "mario_droite.gif";
 
     /**
      * On creation character is looking down
@@ -114,6 +127,7 @@ public class IHMController extends Application {
         primaryStage.setTitle("MySokoban");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
         primaryStage.show();
 
     }
@@ -155,16 +169,16 @@ public class IHMController extends Application {
                 // Ajouter le gif correspondant à l'élément à la gridPane
                 switch (tableauCellules[i][j]) {
                     case Tile.MUR:
-                        tilePath = "file:src/view/sprites/mur.jpg";
+                        tilePath = mur;
                         break;
                     case Tile.BOX:
-                        tilePath = "file:src/view/sprites/caisse.jpg";
+                        tilePath = caisse;
                         break;
                     case Tile.BOX_ON_GOAL:
-                        tilePath = "file:src/view/sprites/caisse_ok.jpg";
+                        tilePath = caisse_ok;
                         break;
                     case Tile.GOAL:
-                        tilePath = "file:src/view/sprites/objectif.png";
+                        tilePath = objectif;
                         break;
                     case Tile.MARIO:
                     case Tile.MARIO_ON_GOAL:
@@ -191,14 +205,14 @@ public class IHMController extends Application {
     private String getMario(Move direction) {
         switch (direction) {
             case UP:
-                return "file:src/view/sprites/mario_haut.gif";
+                return mario_haut;
             case DOWN:
             default:
-                return "file:src/view/sprites/mario_bas.gif";
+                return mario_bas;
             case LEFT:
-                return "file:src/view/sprites/mario_gauche.gif";
+                return mario_gauche;
             case RIGHT:
-                return "file:src/view/sprites/mario_droite.gif";
+                return mario_droite;
         }
     }
 

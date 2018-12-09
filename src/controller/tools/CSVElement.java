@@ -24,6 +24,8 @@ public class CSVElement {
     private int nbColumn;
     byte[][] csvGrid;
     private File csv;
+    private final static String chooser_path = "./src/view/levels";
+//    private final static String chooser_path = "levels";
     
     /**
      * Ask the user to pick the level CSV file
@@ -32,7 +34,7 @@ public class CSVElement {
      */
     public static File pick_CSVLevel(){
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV File", "csv");
-        JFileChooser chooser = new JFileChooser("./src/view/levels");
+        JFileChooser chooser = new JFileChooser(chooser_path);
         chooser.setFileFilter(filter);
 
         int returnVal = chooser.showOpenDialog(null);
